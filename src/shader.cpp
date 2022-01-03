@@ -2,8 +2,7 @@
 
 std::string get_file_contents(const char* filename) {
 	std::ifstream in(filename, std::ios::binary);
-	if (in)
-	{
+	if (in) {
 		std::string contents;
 		in.seekg(0, std::ios::end);
 		contents.resize(in.tellg());
@@ -73,6 +72,12 @@ void Shader::UploadUniform3f (const char* uniform, glm::vec3 vector) {
 	GLuint texUni = glGetUniformLocation(ID, uniform);
 	Activate();
 	glUniform3f(texUni, vector.x, vector.y, vector.z);
+}
+
+void Shader::UploadUniform4f (const char* uniform, glm::vec4 vector) {
+	GLuint texUni = glGetUniformLocation(ID, uniform);
+	Activate();
+	glUniform4f(texUni, vector.x, vector.y, vector.z, vector.w);
 }
 
 void Shader::UploadUniform1i (const char* uniform, int i) {

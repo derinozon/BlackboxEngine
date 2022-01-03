@@ -6,7 +6,7 @@
 
 
 bool vsync = true;
-
+int selectedObj = -1;
 namespace ENG {
 
 	// Camera camera(1600, 900, glm::vec3(0.0f, 0.1f, 0.0f));
@@ -60,6 +60,15 @@ namespace ENG {
 		// Enables the Depth Buffer
 		glEnable(GL_DEPTH_TEST);
 
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		// io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+		ImGui::StyleColorsDark();
+		ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
+		ImGui_ImplOpenGL3_Init("#version 330");
+
+
 		auto loop = []{
 			Input.SetWindow(currentWindow->Get());
 			// CALCULATING DELTATIME //
@@ -70,10 +79,19 @@ namespace ENG {
 			// std::cout << (Time.deltaTime) << std::endl;
 			
 			
-
+			// Enable blending
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			
 			glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 			// Clean the back buffer and depth buffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			ImGui_ImplOpenGL3_NewFrame();
+			ImGui_ImplGlfw_NewFrame();
+			ImGui::NewFrame();
+
+			
 
 			camera.UpdateMatrix();
 
@@ -86,12 +104,20 @@ namespace ENG {
 				Mesh& vel = obj->mesh;
 				Material& mat = obj->material;
 				
-				// if (mat.shader == nullptr) mat.shader = defaultShader;
-				// if (mat.texture == nullptr) mat.texture = Resources::Load<Texture>(mat.texturePath.c_str());
-
+				
+				if (mat.shader == nullptr) mat.shader = defaultShader;
+				if (mat.texture == nullptr) {
+					unsigned char white[] = {255,255,255};
+					mat.texture = new Texture(white, 1, 1, 3, GL_TEXTURE_2D);
+				}
+				
 				mat.shader->Activate();
-				mat.shader->UploadUniform1i("tex0", 0);
-				mat.texture->Bind();
+				mat.shader->UploadUniform4f("color", mat.color);
+				if (mat.texture != nullptr) {
+					mat.shader->UploadUniform1i("tex0", 0);
+					mat.texture->Bind();
+				}
+				
 				
 				// Generate Model Matrix from Transform //
 				glm::mat4 model = glm::mat4(1.0f);
@@ -101,13 +127,42 @@ namespace ENG {
 				model = glm::rotate(model, tr.rotation.z, glm::vec3(0,0,1));
 				model = glm::scale(model, tr.scale);
 
-				mat.shader->UploadUniformMatrix4fv("_MVP", camera.projection * camera.view * model);
+				if (mat.shader != nullptr) {
+					mat.shader->UploadUniformMatrix4fv("_MVP", camera.projection * camera.view * model);
+				}
 
 				vel.Draw(*mat.shader);
 			}
+
+			ImGui::Begin("Hierarch");
+			for (int i = 0; i < entityList.size(); i++) {
+				if ( ImGui::Selectable(entityList[i]->name.c_str(), i==selectedObj) ) {
+					selectedObj = i;
+				}
+			}
+			ImGui::End();
+			
+			ImGui::Begin("Inspector");
+			if (selectedObj > -1) {
+				
+				// float* color = entityList[selectedObj]->material.color.ToFloatArray();
+				glm::vec4 vec = entityList[selectedObj]->material.color;
+				float color[4] = {vec.x, vec.y, vec.z, vec.w};
+				ImGui::ColorEdit4("Color", color);
+				entityList[selectedObj]->material.color = glm::vec4(color[0], color[1], color[2], color[3]);
+				
+			}
+			ImGui::End();
+
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+
 			GameLoop();
 			glfwSwapBuffers(currentWindow->Get());
 			glfwPollEvents();
+
+			
 		};
 
 		
@@ -123,6 +178,10 @@ namespace ENG {
 		for (Entity* obj: entityList) {
 			delete obj;
 		};
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
+
 		glfwDestroyWindow(window->Get());
 		glfwTerminate();
 		return 0;

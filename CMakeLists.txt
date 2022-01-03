@@ -27,7 +27,7 @@ endif (UNIX)
 
 
 # GET SOURCE #
-file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp")
+file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/ImGUI/*.cpp")
 
 # ASSIMP dependencies fail to build on mac Error: Building package irrlicht:x64-osx failed with: BUILD_FAILED
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

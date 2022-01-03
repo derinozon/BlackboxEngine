@@ -46,7 +46,14 @@ namespace ENG {
 		{glm::vec3(-0.5f, 0.5f, 0.0f),   glm::vec3(1.0f, 1.0f, 1.0f),   glm::vec2(0.0f, 1.0f)}    // top left 
 	};
 
-
+	// Entity* CreateQuad () {
+	// 	Texture* brickTex2 = Resources::Load<Texture>("crate.png");
+	// 	Entity* ent = new Entity();
+	
+	// 	ent->transform = {vec3(0, 0, -10), vec3(0,0,45), vec3(3,3,3)};
+	// 	ent->mesh = Mesh(pvertices, pindices);
+	// 	ent->material = Material(defaultShader, brickTex2);
+	// }
 
 
 	/*

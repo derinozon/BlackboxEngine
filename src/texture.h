@@ -14,7 +14,8 @@ public:
 	GLuint ID;
 	GLenum type;
 	Texture(const char* image);
-	Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
+	Texture(unsigned char bytes[], int widthImg, int heightImg, int numColCh, GLenum texType);
+	Texture(const char* image, GLenum texType, GLenum slot, GLenum pixelType);
 	~Texture();
 
 	// Assigns a texture unit to a texture

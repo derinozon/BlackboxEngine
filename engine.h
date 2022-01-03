@@ -3,6 +3,10 @@
 #include <iostream>
 #include <functional>
 
+#include "lib/ImGUI/imgui.h"
+#include "lib/ImGUI/imgui_impl_glfw.h"
+#include "lib/ImGUI/imgui_impl_opengl3.h"
+
 #ifdef __EMSCRIPTEN__
     #include <emscripten.h>
 	// #define GL_GLEXT_PROTOTYPES
@@ -40,12 +44,12 @@ const unsigned int height = 900;
 #include "src/material.h"
 #include "src/transform.h"
 
-#include "src/primitive.h"
 #include "src/resources.h"
 #include "src/shader.h"
 #include "src/camera.h"
 #include "src/input.h"
 #include "src/entity.h"
+#include "src/primitive.h"
 
 namespace ENG {
 	inline InputManager& Input = InputManager::Get();

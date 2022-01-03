@@ -50,7 +50,7 @@ Texture::Texture(const char* image) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType) {
+Texture::Texture(const char* image, GLenum texType = GL_TEXTURE_2D, GLenum slot = GL_TEXTURE0, GLenum pixelType = GL_UNSIGNED_BYTE) {
 	// Assigns the type of the texture ot the texture object
 	type = texType;
 
@@ -61,6 +61,9 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, 
 	// Reads the image from a file and stores it in bytes
 	unsigned char* bytes = stbi_load(image, &widthImg, &heightImg, &numColCh, 0);
 
+	if (!bytes) {
+		Log("Problem loading texture");
+	}
 	// Generates an OpenGL texture object
 	glGenTextures(1, &ID);
 	// Assigns the texture to a Texture Unit
@@ -80,7 +83,8 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, 
 	// glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, flatColor);
 
 	// Assigns the image to the OpenGL Texture object
-	glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes);
+	GLint colorChannel = numColCh > 3 ? GL_RGBA : GL_RGB;
+	glTexImage2D(texType, 0, colorChannel, widthImg, heightImg, 0, colorChannel, pixelType, bytes);
 	// Generates MipMaps
 	glGenerateMipmap(texType);
 
@@ -88,6 +92,31 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, 
 	stbi_image_free(bytes);
 
 	// Unbinds the OpenGL Texture object so that it can't accidentally be modified
+	glBindTexture(texType, 0);
+}
+
+Texture::Texture(unsigned char bytes[], int widthImg, int heightImg, int numColCh, GLenum texType = GL_TEXTURE_2D) {
+	type = texType;
+	stbi_set_flip_vertically_on_load(true);
+
+	if (!bytes) {
+		Log("Problem loading texture");
+	}
+
+	glGenTextures(1, &ID);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(texType, ID);
+
+	glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	GLint colorChannel = numColCh > 3 ? GL_RGBA : GL_RGB;
+	glTexImage2D(texType, 0, colorChannel, widthImg, heightImg, 0, colorChannel, GL_UNSIGNED_BYTE, bytes);
+	glGenerateMipmap(texType);
+
 	glBindTexture(texType, 0);
 }
 
@@ -100,6 +129,8 @@ void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 	// Sets the value of the uniform
 	glUniform1i(texUni, unit);
 }
+
+
 
 void Texture::Bind()
 {
