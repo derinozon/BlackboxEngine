@@ -3,6 +3,7 @@
 
 #include <stb/stb_image.h>
 
+/*
 //Texture brickTex2(texPath2, GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
 Texture::Texture(const char* image) {
 	// Assigns the type of the texture ot the texture object
@@ -49,8 +50,9 @@ Texture::Texture(const char* image) {
 	// Unbinds the OpenGL Texture object so that it can't accidentally be modified
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+*/
 
-Texture::Texture(const char* image, GLenum texType = GL_TEXTURE_2D, GLenum slot = GL_TEXTURE0, GLenum pixelType = GL_UNSIGNED_BYTE) {
+Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum pixelType) {
 	// Assigns the type of the texture ot the texture object
 	type = texType;
 
@@ -60,7 +62,8 @@ Texture::Texture(const char* image, GLenum texType = GL_TEXTURE_2D, GLenum slot 
 	stbi_set_flip_vertically_on_load(true);
 	// Reads the image from a file and stores it in bytes
 	unsigned char* bytes = stbi_load(image, &widthImg, &heightImg, &numColCh, 0);
-
+	width = widthImg; height = heightImg;
+	Log(width, '\n', height);
 	if (!bytes) {
 		Log("Problem loading texture");
 	}
@@ -102,6 +105,8 @@ Texture::Texture(unsigned char bytes[], int widthImg, int heightImg, int numColC
 	if (!bytes) {
 		Log("Problem loading texture");
 	}
+	width = widthImg; height = heightImg;
+	Log(width, '\n', height);
 
 	glGenTextures(1, &ID);
 	glActiveTexture(GL_TEXTURE0);

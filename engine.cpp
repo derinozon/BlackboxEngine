@@ -1,25 +1,10 @@
-#include <iostream>
-
 // Usefull definitions //
 #include "src/def.h"
 #include "engine.h"
 
-
-bool vsync = true;
-int selectedObj = -1;
-
 namespace ENG {
-
-	// Camera camera(1600, 900, glm::vec3(0.0f, 0.1f, 0.0f));
 	
-	// void framebuffer_size_callback (GLFWwindow* window, int width, int height) {
-    // 	glViewport(0, 0, width, height);
-	// 	camera.width = width;
-	// 	camera.height = height;
-	// }
-
-	
-	Window* init (const char* title, int width, int height, bool fullscreen) {
+	Window* init (const char* title, int width, int height, bool fullscreen, bool vsync) {
 		// Initialize GLFW
 		glfwSetErrorCallback([](int error, const char *msg){
 			std::cerr << '[' << error << ']' << msg << std::endl;
@@ -56,8 +41,16 @@ namespace ENG {
 
 		glfwSetFramebufferSizeCallback(window->Get(), framebuffer_size_callback);
 		framebuffer_size_callback(window->Get(), width, height);
-		// glViewport(0, 0, width, height);
+
 		std::cout << "Viewport success" << std::endl;
+
+		auto drop_callback = [] (GLFWwindow* window, int count, const char** paths) {
+			Entity* ent = CreateQuad();
+			ent->material.texture = Resources::Load<Texture>(paths[0]);
+		};
+
+		glfwSetDropCallback(window->Get(), drop_callback);
+
 		camera.perspective = true;
 
 		defaultShader = new Shader(
@@ -65,11 +58,11 @@ namespace ENG {
 			(resFolder/fs::path("default.frag")).c_str()
 		);
 
-		// init_scripting();
 		currentWindow = window;
 		return window;
 	}
 
+	int selectedObj = -1;
 	int run (Window* window) {
 
 		// Enables the Depth Buffer
@@ -82,7 +75,6 @@ namespace ENG {
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
 		ImGui_ImplOpenGL3_Init("#version 330");
-
 
 		auto loop = []{
 			Input.SetWindow(currentWindow->Get());
@@ -138,7 +130,14 @@ namespace ENG {
 				model = glm::rotate(model, glm::radians(tr.rotation.x), glm::vec3(1,0,0));
 				model = glm::rotate(model, glm::radians(tr.rotation.y), glm::vec3(0,1,0));
 				model = glm::rotate(model, glm::radians(tr.rotation.z), glm::vec3(0,0,1));
-				model = glm::scale(model, tr.scale);
+				// model = glm::scale(model, tr.scale);
+				
+				if (mat.texture->width != mat.texture->height) {
+					float w = (float)(mat.texture->width);
+					float h = (float)(mat.texture->height);
+					model = glm::scale(model, glm::vec3(w/h, h/w, 1) );
+					Log(mat.texture->width,'_', mat.texture->height);
+				}
 
 				if (mat.shader != nullptr) {
 					mat.shader->UploadUniformMatrix4fv("_MVP", camera.projection * camera.view * model);
@@ -146,7 +145,7 @@ namespace ENG {
 
 				vel.Draw(*mat.shader);
 			}
-
+			Log("Entity List : ", entityList.size());
 			ImGui::Begin("Hierarch");
 			for (int i = 0; i < entityList.size(); i++) {
 				if ( ImGui::Selectable(entityList[i]->name.c_str(), i==selectedObj) ) {
@@ -154,30 +153,33 @@ namespace ENG {
 				}
 			}
 			if (ImGui::Button("New Sprite")) {
-				Entity* ent = new Entity("New Sprite");
-				ent->mesh = Mesh(pvertices, pindices);
-				entityList.push_back(ent);
+				Log("Button");
+				CreateQuad();
 			}
 			ImGui::End();
 			
 			ImGui::Begin("Inspector");
 			if (selectedObj > -1) {
-				auto DragFloat3 = [](const char* label, glm::vec3 vec) {
+				auto DragFloat3 = [](const char* label, glm::vec3 vec, float speed = 0.05) {
 					float vector[3] = {vec.x, vec.y, vec.z};
-					ImGui::DragFloat3(label, vector, 0.05);
+					ImGui::DragFloat3(label, vector, speed);
 					return glm::vec3(vector[0], vector[1], vector[2]);
 				};
 
 				Entity* obj = entityList[selectedObj];
 
 				obj->transform.position = DragFloat3("Position", obj->transform.position);
-				obj->transform.rotation = DragFloat3("Rotation", obj->transform.rotation);
+				obj->transform.rotation = DragFloat3("Rotation", obj->transform.rotation, 0.5);
 				obj->transform.scale = DragFloat3("Scale", obj->transform.scale);
 
 				glm::vec4 vec = obj->material.color;
 				float color[4] = {vec.x, vec.y, vec.z, vec.w};
 				ImGui::ColorEdit4("Color", color);
 				obj->material.color = glm::vec4(color[0], color[1], color[2], color[3]);
+
+				
+				obj->material.texture->Bind();
+				ImGui::Image((void*)(intptr_t)(obj->material.texture->ID), {125, 125});
 			}
 			ImGui::End();
 

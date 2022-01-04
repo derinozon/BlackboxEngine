@@ -1,9 +1,6 @@
 #pragma once
 #define EDITOR
 
-#include <iostream>
-#include <functional>
-
 #ifdef EDITOR
 #include "lib/ImGUI/imgui.h"
 #include "lib/ImGUI/imgui_impl_glfw.h"
@@ -52,17 +49,17 @@ const unsigned int height = 900;
 #include "src/shader.h"
 #include "src/camera.h"
 #include "src/input.h"
+#include "src/scene.h"
 #include "src/entity.h"
 #include "src/primitive.h"
 
 namespace ENG {
 	inline InputManager& Input = InputManager::Get();
 	inline Shader* defaultShader;
-	inline Camera camera(1600, 900, glm::vec3(0.0f, 0.0f, 0.0f));
+	inline Camera camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
 
 	int run(Window* window);
-	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false);
+	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false, bool vsync = true);
 	inline Window* currentWindow;
-	inline std::vector<Entity*> entityList = std::vector<Entity*>();
 	inline void (*GameLoop)(void);
 }

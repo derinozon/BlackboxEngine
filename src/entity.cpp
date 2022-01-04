@@ -3,11 +3,13 @@
 namespace ENG {
 
 	Entity::Entity(std::string entityName) {
+		Log("Creating Entity");
 		name = entityName;
+		entityList.push_back(this);
 	}
 
 	Entity::Entity() {
-		Log("Creating Entity");
+		Entity("Entity");
 	}
 
 	Entity::~Entity() {

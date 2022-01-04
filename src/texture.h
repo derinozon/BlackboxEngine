@@ -13,9 +13,11 @@ class Texture {
 public:
 	GLuint ID;
 	GLenum type;
-	Texture(const char* image);
+	int width, height;
+
+	// Texture(const char* image);
 	Texture(unsigned char bytes[], int widthImg, int heightImg, int numColCh, GLenum texType);
-	Texture(const char* image, GLenum texType, GLenum slot, GLenum pixelType);
+	Texture(const char* image, GLenum texType = GL_TEXTURE_2D, GLenum slot = GL_TEXTURE0, GLenum pixelType = GL_UNSIGNED_BYTE);
 	~Texture();
 
 	// Assigns a texture unit to a texture

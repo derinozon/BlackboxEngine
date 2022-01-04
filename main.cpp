@@ -7,11 +7,11 @@ void crate () {
 	Texture* brickTex2 = Resources::Load<Texture>("crate.png");
 	Entity* ent = new Entity("Crate");
 	
-	ent->transform = {vec3(0, 0, -10), vec3(0,0,45), vec3(3,3,3)};
+	ent->transform = {vec3(0, 0, -1), vec3(0,0,45), vec3(3,3,3)};
 	ent->mesh = Mesh(pvertices, pindices);
 	ent->material = Material(defaultShader, brickTex2);
 	
-	entityList.push_back(ent);
+	// entityList.push_back(ent);
 }
 
 void box () {
@@ -21,14 +21,13 @@ void box () {
 	// ent->material.color = vec4(0.6F, 0.2F, 0.7F, 0.7F);
 	Entity* ent = CreateQuad();
 
-	entityList.push_back(ent);
+	// entityList.push_back(ent);
 }
 
 int main() {
 	Window* window = ENG::init("Blackbox Engine");
-	// crate();
+	crate();
 	box();
-	
 	GameLoop = []() {
 		float speed = 10.0f * Time.deltaTime;
 		
