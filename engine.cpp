@@ -7,11 +7,19 @@
 
 bool vsync = true;
 int selectedObj = -1;
+
 namespace ENG {
 
 	// Camera camera(1600, 900, glm::vec3(0.0f, 0.1f, 0.0f));
+	
+	// void framebuffer_size_callback (GLFWwindow* window, int width, int height) {
+    // 	glViewport(0, 0, width, height);
+	// 	camera.width = width;
+	// 	camera.height = height;
+	// }
 
-	Window* init () {
+	
+	Window* init (const char* title, int width, int height, bool fullscreen) {
 		// Initialize GLFW
 		glfwSetErrorCallback([](int error, const char *msg){
 			std::cerr << '[' << error << ']' << msg << std::endl;
@@ -22,9 +30,7 @@ namespace ENG {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		std::cout << "Init success" << std::endl;
 		
-		Window* window = new Window(1600, 900, false);
-		
-		
+		Window* window = new Window(title, width, height, fullscreen);
 		
 		if (window->Get() == NULL) {
 			std::cout << "Failed to create GLFW window" << std::endl;
@@ -41,7 +47,16 @@ namespace ENG {
 			glfwSwapInterval(vsync);
 			gladLoadGL();
 		#endif
-		glViewport(0, 0, width, height);
+
+		auto framebuffer_size_callback = [](GLFWwindow* window, int width, int height) {
+			glViewport(0, 0, width, height);
+			camera.width = width;
+			camera.height = height;
+		};
+
+		glfwSetFramebufferSizeCallback(window->Get(), framebuffer_size_callback);
+		framebuffer_size_callback(window->Get(), width, height);
+		// glViewport(0, 0, width, height);
 		std::cout << "Viewport success" << std::endl;
 		camera.perspective = true;
 
@@ -75,9 +90,6 @@ namespace ENG {
 			Time.time = glfwGetTime();
 			Time.deltaTime = Time.time - Time.lastFrameTime;
 			Time.lastFrameTime = Time.time;
-
-			// std::cout << (Time.deltaTime) << std::endl;
-			
 			
 			// Enable blending
 			glEnable(GL_BLEND);
@@ -97,6 +109,7 @@ namespace ENG {
 
 			// (*OnUpdate)();
 			// OnUpdate();
+			GameLoop();
 
 			// Draw Meshes
 			for (Entity* obj: entityList) {
@@ -122,9 +135,9 @@ namespace ENG {
 				// Generate Model Matrix from Transform //
 				glm::mat4 model = glm::mat4(1.0f);
 				model = glm::translate(model, tr.position);
-				model = glm::rotate(model, tr.rotation.x, glm::vec3(1,0,0));
-				model = glm::rotate(model, tr.rotation.y, glm::vec3(0,1,0));
-				model = glm::rotate(model, tr.rotation.z, glm::vec3(0,0,1));
+				model = glm::rotate(model, glm::radians(tr.rotation.x), glm::vec3(1,0,0));
+				model = glm::rotate(model, glm::radians(tr.rotation.y), glm::vec3(0,1,0));
+				model = glm::rotate(model, glm::radians(tr.rotation.z), glm::vec3(0,0,1));
 				model = glm::scale(model, tr.scale);
 
 				if (mat.shader != nullptr) {
@@ -140,29 +153,39 @@ namespace ENG {
 					selectedObj = i;
 				}
 			}
+			if (ImGui::Button("New Sprite")) {
+				Entity* ent = new Entity("New Sprite");
+				ent->mesh = Mesh(pvertices, pindices);
+				entityList.push_back(ent);
+			}
 			ImGui::End();
 			
 			ImGui::Begin("Inspector");
 			if (selectedObj > -1) {
-				
-				// float* color = entityList[selectedObj]->material.color.ToFloatArray();
-				glm::vec4 vec = entityList[selectedObj]->material.color;
+				auto DragFloat3 = [](const char* label, glm::vec3 vec) {
+					float vector[3] = {vec.x, vec.y, vec.z};
+					ImGui::DragFloat3(label, vector, 0.05);
+					return glm::vec3(vector[0], vector[1], vector[2]);
+				};
+
+				Entity* obj = entityList[selectedObj];
+
+				obj->transform.position = DragFloat3("Position", obj->transform.position);
+				obj->transform.rotation = DragFloat3("Rotation", obj->transform.rotation);
+				obj->transform.scale = DragFloat3("Scale", obj->transform.scale);
+
+				glm::vec4 vec = obj->material.color;
 				float color[4] = {vec.x, vec.y, vec.z, vec.w};
 				ImGui::ColorEdit4("Color", color);
-				entityList[selectedObj]->material.color = glm::vec4(color[0], color[1], color[2], color[3]);
-				
+				obj->material.color = glm::vec4(color[0], color[1], color[2], color[3]);
 			}
 			ImGui::End();
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-
-			GameLoop();
 			glfwSwapBuffers(currentWindow->Get());
 			glfwPollEvents();
-
-			
 		};
 
 		

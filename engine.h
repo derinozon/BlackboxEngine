@@ -1,11 +1,14 @@
 #pragma once
+#define EDITOR
 
 #include <iostream>
 #include <functional>
 
+#ifdef EDITOR
 #include "lib/ImGUI/imgui.h"
 #include "lib/ImGUI/imgui_impl_glfw.h"
 #include "lib/ImGUI/imgui_impl_opengl3.h"
+#endif
 
 #ifdef __EMSCRIPTEN__
     #include <emscripten.h>
@@ -36,6 +39,7 @@ const unsigned int height = 900;
 
 #include "src/debug.h"
 
+#include "serialization.h"
 #include "src/gametime.h"
 #include "src/texture.h"
 
@@ -57,7 +61,7 @@ namespace ENG {
 	inline Camera camera(1600, 900, glm::vec3(0.0f, 0.0f, 0.0f));
 
 	int run(Window* window);
-	Window* init();
+	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false);
 	inline Window* currentWindow;
 	inline std::vector<Entity*> entityList = std::vector<Entity*>();
 	inline void (*GameLoop)(void);

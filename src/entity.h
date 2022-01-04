@@ -1,5 +1,7 @@
 #pragma once
 
+// #include <nlohmann/json.hpp>
+
 #include "transform.h"
 #include "mesh.h"
 #include "material.h"
@@ -16,5 +18,7 @@ namespace ENG {
 		Entity();
 		Entity(std::string entityName);
 		~Entity();
+
+		// NLOHMANN_DEFINE_TYPE_INTRUSIVE(Entity, name, transform, mesh)
 	};
 }

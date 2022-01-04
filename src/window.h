@@ -11,7 +11,7 @@ public:
 		return window;
 	}
 
-	Window (int width, int height, bool fullscreen) {
+	Window (const char* title, int width, int height, bool fullscreen) {
 		unsigned int wWidth = width;
 		unsigned int wHeight = height;
 		#ifdef __APPLE__
@@ -23,7 +23,7 @@ public:
 		// Create Window
 		window = glfwCreateWindow(
 			wWidth, wHeight,
-			"Basic 3D Rendering",
+			title,
 			fullscreen ? glfwGetPrimaryMonitor() : NULL,
 			NULL
 		);
