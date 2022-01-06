@@ -68,13 +68,14 @@ namespace ENG {
 		// Enables the Depth Buffer
 		glEnable(GL_DEPTH_TEST);
 
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		// io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
-		ImGui_ImplOpenGL3_Init("#version 330");
+		// IMGUI_CHECKVERSION();
+		// ImGui::CreateContext();
+		// ImGuiIO& io = ImGui::GetIO(); (void)io;
+		// // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+		// ImGui::StyleColorsDark();
+		// ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
+		// ImGui_ImplOpenGL3_Init("#version 330");
+		Editor::InitEditor(window);
 
 		auto loop = []{
 			Input.SetWindow(currentWindow->Get());
@@ -91,10 +92,8 @@ namespace ENG {
 			// Clean the back buffer and depth buffer
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			ImGui_ImplOpenGL3_NewFrame();
-			ImGui_ImplGlfw_NewFrame();
-			ImGui::NewFrame();
-
+			
+			Editor::NewFrame();
 			
 
 			camera.UpdateMatrix();
@@ -130,13 +129,12 @@ namespace ENG {
 				model = glm::rotate(model, glm::radians(tr.rotation.x), glm::vec3(1,0,0));
 				model = glm::rotate(model, glm::radians(tr.rotation.y), glm::vec3(0,1,0));
 				model = glm::rotate(model, glm::radians(tr.rotation.z), glm::vec3(0,0,1));
-				// model = glm::scale(model, tr.scale);
+				model = glm::scale(model, tr.scale);
 				
 				if (mat.texture->width != mat.texture->height) {
 					float w = (float)(mat.texture->width);
 					float h = (float)(mat.texture->height);
 					model = glm::scale(model, glm::vec3(w/h, h/w, 1) );
-					Log(mat.texture->width,'_', mat.texture->height);
 				}
 
 				if (mat.shader != nullptr) {
@@ -145,46 +143,36 @@ namespace ENG {
 
 				vel.Draw(*mat.shader);
 			}
-			Log("Entity List : ", entityList.size());
+			// Log("Entity List : ", entityList.size());
+			
 			ImGui::Begin("Hierarch");
 			for (int i = 0; i < entityList.size(); i++) {
-				if ( ImGui::Selectable(entityList[i]->name.c_str(), i==selectedObj) ) {
+				if ( ImGui::Selectable((entityList[i]->name + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
 					selectedObj = i;
 				}
 			}
 			if (ImGui::Button("New Sprite")) {
-				Log("Button");
-				CreateQuad();
+				std::string label = "Quad";//+ std::to_string(entityList.size());
+				CreateQuad(label.c_str());
 			}
 			ImGui::End();
 			
 			ImGui::Begin("Inspector");
 			if (selectedObj > -1) {
-				auto DragFloat3 = [](const char* label, glm::vec3 vec, float speed = 0.05) {
-					float vector[3] = {vec.x, vec.y, vec.z};
-					ImGui::DragFloat3(label, vector, speed);
-					return glm::vec3(vector[0], vector[1], vector[2]);
-				};
-
 				Entity* obj = entityList[selectedObj];
 
-				obj->transform.position = DragFloat3("Position", obj->transform.position);
-				obj->transform.rotation = DragFloat3("Rotation", obj->transform.rotation, 0.5);
-				obj->transform.scale = DragFloat3("Scale", obj->transform.scale);
+				obj->transform.position = Editor::DragFloat3("Position", obj->transform.position);
+				obj->transform.rotation = Editor::DragFloat3("Rotation", obj->transform.rotation, 0.5);
+				obj->transform.scale = Editor::DragFloat3("Scale", obj->transform.scale);
 
-				glm::vec4 vec = obj->material.color;
-				float color[4] = {vec.x, vec.y, vec.z, vec.w};
-				ImGui::ColorEdit4("Color", color);
-				obj->material.color = glm::vec4(color[0], color[1], color[2], color[3]);
-
+				obj->material.color = Editor::ColorField("Color", obj->material.color);
 				
-				obj->material.texture->Bind();
 				ImGui::Image((void*)(intptr_t)(obj->material.texture->ID), {125, 125});
 			}
 			ImGui::End();
 
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+			Editor::Render();
+			
 
 			glfwSwapBuffers(currentWindow->Get());
 			glfwPollEvents();
@@ -203,9 +191,7 @@ namespace ENG {
 		for (Entity* obj: entityList) {
 			delete obj;
 		};
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		Editor::DestroyEditor();
 
 		glfwDestroyWindow(window->Get());
 		glfwTerminate();

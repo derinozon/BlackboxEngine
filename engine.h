@@ -1,16 +1,14 @@
 #pragma once
 #define EDITOR
 
-#ifdef EDITOR
-#include "lib/ImGUI/imgui.h"
-#include "lib/ImGUI/imgui_impl_glfw.h"
-#include "lib/ImGUI/imgui_impl_opengl3.h"
-#endif
-
 #ifdef __EMSCRIPTEN__
     #include <emscripten.h>
 	// #define GL_GLEXT_PROTOTYPES
 	// #define EGL_EGLEXT_PROTOTYPES
+#endif
+
+#ifdef EDITOR
+#include "src/editor.h"
 #endif
 
 #ifdef __EMSCRIPTEN__
@@ -31,12 +29,9 @@
 #include "src/window.h"
 namespace fs = std::filesystem;
 
-const unsigned int width = 1600;
-const unsigned int height = 900;
-
 #include "src/debug.h"
 
-#include "serialization.h"
+// #include "serialization.h"
 #include "src/gametime.h"
 #include "src/texture.h"
 

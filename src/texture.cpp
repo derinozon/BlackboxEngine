@@ -63,7 +63,7 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum pixelTyp
 	// Reads the image from a file and stores it in bytes
 	unsigned char* bytes = stbi_load(image, &widthImg, &heightImg, &numColCh, 0);
 	width = widthImg; height = heightImg;
-	Log(width, '\n', height);
+	
 	if (!bytes) {
 		Log("Problem loading texture");
 	}
@@ -106,7 +106,6 @@ Texture::Texture(unsigned char bytes[], int widthImg, int heightImg, int numColC
 		Log("Problem loading texture");
 	}
 	width = widthImg; height = heightImg;
-	Log(width, '\n', height);
 
 	glGenTextures(1, &ID);
 	glActiveTexture(GL_TEXTURE0);
