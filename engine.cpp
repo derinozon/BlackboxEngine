@@ -102,8 +102,7 @@ namespace ENG {
 
 			camera.UpdateMatrix();
 
-			// (*OnUpdate)();
-			// OnUpdate();
+			// (*GameLoop)();
 			GameLoop();
 
 			// Draw Meshes

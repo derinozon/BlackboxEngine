@@ -16,21 +16,27 @@ void box () {
 }
 
 int main() {
+	Log("HRLLO"); 
 	resFolder = "C:\\Users\\admin\\Documents\\Github\\BlackboxEngine\\res\\";
 	Window* window = ENG::init("Blackbox Engine");
-	//crate();
-	box();
+	crate();
+	
+	//box();
 	GameLoop = []() {
+		Log("ASDF");
+		/*
 		float speed = 10.0f * Time.deltaTime;
 		
 		camera.Position += speed * glm::vec3(1,0,0) * Input.GetAxisHorizontal();
 		camera.Position += speed * glm::vec3(0,0,-1) * Input.GetAxisVertical();
+		
 		if (Input.GetKey(GLFW_KEY_SPACE)) {
 			camera.Position += speed * glm::vec3(0,1,0);
 		}
 		if (Input.GetKey(GLFW_KEY_LEFT_CONTROL)) {
 			camera.Position += speed * glm::vec3(0,-1,0);
 		}
+		*/
 	};
 	ENG::run(window);
 	
