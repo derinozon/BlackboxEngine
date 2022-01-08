@@ -1,4 +1,5 @@
 #vcpkc install glfw3 assimp entt
+#cmake .. -G "MinGW Makefiles"
 
 cmake_minimum_required(VERSION 3.21)
 set (CMAKE_CXX_STANDARD 17)
@@ -7,15 +8,44 @@ set (CMAKE_BUILD_TYPE Debug)
 project(main)
 
 
+include(FetchContent)
 
+FetchContent_Declare(
+        glfw
+        GIT_REPOSITORY https://github.com/glfw/glfw
+)
+
+FetchContent_GetProperties(glfw)
+if(NOT glfw_POPULATED)
+    FetchContent_Populate(glfw)
+
+    set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
+    set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
+    set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
+    set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
+
+    add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
+endif()
+
+FetchContent_Declare(
+        assimp
+        GIT_REPOSITORY https://github.com/assimp/assimp
+)
+
+FetchContent_GetProperties(assimp)
+if(NOT glfw_POPULATED)
+    FetchContent_Populate(assimp)
+
+    add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
+endif()
 
 # FIND PACKAGES #
-find_package(glfw3 CONFIG REQUIRED)
-find_package(ASSIMP CONFIG REQUIRED)
+# find_package(glfw3 CONFIG REQUIRED)
+# find_package(ASSIMP CONFIG REQUIRED)
 
-if(ASSIMP_FOUND)
-    include_directories(${ASSIMP_INCLUDE_DIR})
-endif()
+#if(ASSIMP_FOUND)
+include_directories(${ASSIMP_INCLUDE_DIR})
+#endif()
 
 if (UNIX)
 message("Running command")

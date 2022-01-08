@@ -21,13 +21,12 @@
 #include <GLFW/glfw3.h>
 
 #ifndef __EMSCRIPTEN__
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+// #include <assimp/Importer.hpp>
+// #include <assimp/scene.h>
+// #include <assimp/postprocess.h>
 #endif
 
 #include "src/window.h"
-namespace fs = std::filesystem;
 
 #include "src/debug.h"
 

@@ -15,13 +15,10 @@ std::string get_file_contents(const char* filename) {
 }
 
 Shader::Shader(){};
-Shader::Shader(const char* vertexFile, const char* fragmentFile) {
+Shader::Shader(const char* vertexSource, const char* fragmentSource) {
 
 	// const char* vertexSource = get_file_contents(vertexFile).c_str();
 	// const char* fragmentSource = get_file_contents(fragmentFile).c_str();
-
-	const char* vertexSource = DEFAULT_UNLIT_VERT;
-	const char* fragmentSource = DEFAULT_UNLIT_FRAG;
 
 	// Create Vertex Shader Object and get its reference
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
