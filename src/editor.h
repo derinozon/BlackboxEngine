@@ -16,7 +16,9 @@
 #include "window.h"
 
 namespace ENG::Editor {
-	void InitEditor(Window* window);
+	// inline ImGuiIO io;
+
+	ImGuiIO& InitEditor(Window* window);
 	void DestroyEditor();
 	void Render();
 	void NewFrame();

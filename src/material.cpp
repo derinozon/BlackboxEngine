@@ -1,5 +1,4 @@
 #include "material.h"
-#include "debug.h"
 
 namespace ENG {
 	Material::Material () {

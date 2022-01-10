@@ -75,7 +75,10 @@ namespace ENG {
 		// ImGui::StyleColorsDark();
 		// ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
 		// ImGui_ImplOpenGL3_Init("#version 330");
-		Editor::InitEditor(window);
+		ImGuiIO& io = Editor::InitEditor(window);
+		io.Fonts->AddFontFromFileTTF("../Roboto-Light.ttf", 13);
+		ImGuiStyle& style = ImGui::GetStyle();
+		// style.ScaleAllSizes(0.1);
 
 		auto loop = []{
 			Input.SetWindow(currentWindow->Get());
@@ -143,17 +146,37 @@ namespace ENG {
 
 				vel.Draw(*mat.shader);
 			}
-			// Log("Entity List : ", entityList.size());
 			
 			ImGui::Begin("Hierarch");
+			if (ImGui::BeginPopupContextWindow()) {
+				if (ImGui::MenuItem("New Entity")) {
+					CreateQuad();
+				}
+
+				ImGui::EndPopup();
+			}
 			for (int i = 0; i < entityList.size(); i++) {
 				if ( ImGui::Selectable((entityList[i]->name + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
 					selectedObj = i;
+					
+					
+				}
+				// ImGui::OpenPopupOnItemClick();
+				// if (ImGui::MenuItem("Delete")) {
+				// 			CreateQuad();
+				// 		}
+				if (ImGui::IsItemClicked(1)) {
+					// if (ImGui::OpenPopup()) {
+					// 	if (ImGui::MenuItem("Delete")) {
+					// 		CreateQuad();
+					// 	}
+
+					// 	ImGui::EndPopup();
+					// }
 				}
 			}
 			if (ImGui::Button("New Sprite")) {
 				std::string label = "Quad";//+ std::to_string(entityList.size());
-				CreateQuad(label.c_str());
 			}
 			ImGui::End();
 			

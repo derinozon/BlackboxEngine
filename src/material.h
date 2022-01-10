@@ -3,6 +3,7 @@
 #include "texture.h"
 #include "shader.h"
 #include "color.h"
+#include "debug.h"
 
 namespace ENG {
 	class Material {

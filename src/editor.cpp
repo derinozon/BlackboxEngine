@@ -2,10 +2,10 @@
 
 namespace ENG::Editor {
 
-	void InitEditor (Window* window) {
+	ImGuiIO& InitEditor (Window* window) {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		ImGuiIO io = ImGui::GetIO(); (void)io;
 		// io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
@@ -14,6 +14,7 @@ namespace ENG::Editor {
 		#else
 		ImGui_ImplOpenGL3_Init("#version 330");
 		#endif
+		return io;
 	}
 
 	void DestroyEditor () {
