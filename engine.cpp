@@ -53,9 +53,13 @@ namespace ENG {
 
 		camera.perspective = true;
 
+		//defaultShader = new Shader(
+		//	(resFolder+"default.vert").c_str(),
+		//	(resFolder+"default.frag").c_str()
+		//);
 		defaultShader = new Shader(
-			(resFolder/fs::path("default.vert")).c_str(),
-			(resFolder/fs::path("default.frag")).c_str()
+			DEFAULT_UNLIT_VERT,
+			DEFAULT_UNLIT_FRAG
 		);
 
 		currentWindow = window;
@@ -101,8 +105,7 @@ namespace ENG {
 
 			camera.UpdateMatrix();
 
-			// (*OnUpdate)();
-			// OnUpdate();
+			// (*GameLoop)();
 			GameLoop();
 
 			// Draw Meshes

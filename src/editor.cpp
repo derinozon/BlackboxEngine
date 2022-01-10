@@ -14,6 +14,9 @@ namespace ENG::Editor {
 		#else
 		ImGui_ImplOpenGL3_Init("#version 330");
 		#endif
+		
+		Log("Editor Initialized");
+
 		return io;
 	}
 

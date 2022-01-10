@@ -3,23 +3,27 @@
 #include <typeinfo>
 #include <vector>
 
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+// #include <assimp/Importer.hpp>
+// #include <assimp/scene.h>
+// #include <assimp/postprocess.h>
 
 #include "mesh.h"
 #include "entity.h"
 #ifndef __EMSCRIPTEN__
-#include "model.h"
+// #include "model.h"
 #endif
 
-
+//#include <filesystem>
+//namespace fs = std::filesystem;
 
 namespace ENG {
-	static fs::path resFolder = fs::current_path() / fs::path("res");
+	//static fs::path resFolder = fs::current_path() / fs::path("res");
+	static std::string resFolder = "./res/";
 	
 	namespace Resources {
 
+		// FS Version //
+		/*
 		inline void SetPath (const char* path) {
 			resFolder = fs::current_path() / fs::path(path);
 		}
@@ -31,23 +35,25 @@ namespace ENG {
 			infile.close();
 			return out;
 		}
-		
 	
 		template <typename T>
 		inline T* Load (const char* path) {
-			const char* n = typeid(T).name();
-			
-			// if (typeid(T) == typeid(Texture)) {
-				
-			// }
-			// else {
-				
-			// }
-
 			return new T( (resFolder/fs::path(path)).c_str() );
 		}
+		*/
 
-		
+		inline std::string Load (const char* path) {
+			std::string out;
+			std::ifstream infile(resFolder+path);
+			infile >> out;
+			infile.close();
+			return out;
+		}
+	
+		template <typename T>
+		inline T* Load (const char* path) {
+			return new T( (resFolder+path).c_str() );
+		}
 
 		// void GenerateModel (aiNode *node, const aiScene *scene) {
 
@@ -88,14 +94,14 @@ namespace ENG {
 		// }
 
 		#ifndef __EMSCRIPTEN__
-		Model LoadModel (const char* path) {
-			// Too much copying pass by referance !!! //
-			Assimp::Importer importer;
-			const char* modelPath = (resFolder/fs::path(path)).c_str();
-			const aiScene *scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs); 
-			
-			return processNode(scene->mRootNode, scene);
-		}
+		// Model LoadModel (const char* path) {
+		// 	// Too much copying pass by referance !!! //
+		// 	Assimp::Importer importer;
+		// 	const char* modelPath = (resFolder/fs::path(path)).c_str();
+		// 	const aiScene *scene = importer.ReadFile(modelPath, aiProcess_Triangulate | aiProcess_FlipUVs); 
+		// 	
+		// 	return processNode(scene->mRootNode, scene);
+		// }
 
 		// Entity* LoadModelAsEntity (const char* path) {
 		// 	// Too much copying pass by referance !!! //
