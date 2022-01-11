@@ -13,17 +13,38 @@
 // #include "model.h"
 #endif
 
-//#include <filesystem>
-//namespace fs = std::filesystem;
+#ifndef WIN
+#include <filesystem>
+namespace fs = std::filesystem;
+#endif
 
 namespace ENG {
-	//static fs::path resFolder = fs::current_path() / fs::path("res");
+	#ifndef WIN
+	static fs::path resFolder = fs::current_path() / fs::path("res");
+	#else
 	static std::string resFolder = "./res/";
+	#endif
 	
 	namespace Resources {
-
+		
 		// FS Version //
 		/*
+		
+		*/
+		#ifdef WIN
+		inline std::string Load (const char* path) {
+			std::string out;
+			std::ifstream infile(resFolder+path);
+			infile >> out;
+			infile.close();
+			return out;
+		}
+	
+		template <typename T>
+		inline T* Load (const char* path) {
+			return new T( (resFolder+path).c_str() );
+		}
+		#else
 		inline void SetPath (const char* path) {
 			resFolder = fs::current_path() / fs::path(path);
 		}
@@ -40,21 +61,7 @@ namespace ENG {
 		inline T* Load (const char* path) {
 			return new T( (resFolder/fs::path(path)).c_str() );
 		}
-		*/
-
-		inline std::string Load (const char* path) {
-			std::string out;
-			std::ifstream infile(resFolder+path);
-			infile >> out;
-			infile.close();
-			return out;
-		}
-	
-		template <typename T>
-		inline T* Load (const char* path) {
-			return new T( (resFolder+path).c_str() );
-		}
-
+		#endif
 		// void GenerateModel (aiNode *node, const aiScene *scene) {
 
 		// 	// std::cout << node->mName.C_Str() << std::endl;

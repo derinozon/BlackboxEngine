@@ -5,7 +5,7 @@ namespace ENG::Editor {
 	ImGuiIO& InitEditor (Window* window) {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		ImGuiIO io = ImGui::GetIO(); (void)io;
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		// io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
@@ -35,6 +35,10 @@ namespace ENG::Editor {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+	}
+
+	void ImageField (Texture* texture) {
+		ImGui::Image((void*)(intptr_t)(texture->ID), {80, 80}, {0,1}, {1,0});
 	}
 
 	glm::vec3 DragFloat3 (const char* label, glm::vec3 vec, float speed) {

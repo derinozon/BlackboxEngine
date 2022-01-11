@@ -45,7 +45,8 @@ namespace ENG {
 		std::cout << "Viewport success" << std::endl;
 
 		auto drop_callback = [] (GLFWwindow* window, int count, const char** paths) {
-			Entity* ent = CreateQuad();
+			auto p = fs::path(paths[0]);
+			Entity* ent = CreateQuad(p.filename().c_str());
 			ent->material.texture = Resources::Load<Texture>(paths[0]);
 		};
 
@@ -53,10 +54,6 @@ namespace ENG {
 
 		camera.perspective = true;
 
-		//defaultShader = new Shader(
-		//	(resFolder+"default.vert").c_str(),
-		//	(resFolder+"default.frag").c_str()
-		//);
 		defaultShader = new Shader(
 			DEFAULT_UNLIT_VERT,
 			DEFAULT_UNLIT_FRAG
@@ -68,19 +65,11 @@ namespace ENG {
 
 	int selectedObj = -1;
 	int run (Window* window) {
-
 		// Enables the Depth Buffer
 		glEnable(GL_DEPTH_TEST);
 
-		// IMGUI_CHECKVERSION();
-		// ImGui::CreateContext();
-		// ImGuiIO& io = ImGui::GetIO(); (void)io;
-		// // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-		// ImGui::StyleColorsDark();
-		// ImGui_ImplGlfw_InitForOpenGL(window->Get(), true);
-		// ImGui_ImplOpenGL3_Init("#version 330");
 		ImGuiIO& io = Editor::InitEditor(window);
-		io.Fonts->AddFontFromFileTTF("../Roboto-Light.ttf", 13);
+		// io.Fonts->AddFontFromFileTTF("../Roboto-Light.ttf", 13);
 		ImGuiStyle& style = ImGui::GetStyle();
 		// style.ScaleAllSizes(0.1);
 
@@ -138,9 +127,10 @@ namespace ENG {
 				model = glm::scale(model, tr.scale);
 				
 				if (mat.texture->width != mat.texture->height) {
-					float w = (float)(mat.texture->width);
-					float h = (float)(mat.texture->height);
-					model = glm::scale(model, glm::vec3(w/h, h/w, 1) );
+					double w = (double)(mat.texture->width);
+					double h = (double)(mat.texture->height);
+					double d = w > h ? w : h;
+					model = glm::scale(model, glm::vec3(w/d, h/d, 1.0) );
 				}
 
 				if (mat.shader != nullptr) {
@@ -178,10 +168,16 @@ namespace ENG {
 					// }
 				}
 			}
-			if (ImGui::Button("New Sprite")) {
-				std::string label = "Quad";//+ std::to_string(entityList.size());
-			}
+			// if (ImGui::Button("New Sprite")) {
+			// 	std::string label = "Quad";
+			// }
 			ImGui::End();
+
+			if (Input.GetKey(GLFW_KEY_LEFT_SUPER) && Input.GetKey(GLFW_KEY_BACKSPACE) && selectedObj>-1) {
+				delete entityList[selectedObj];
+				entityList.erase(entityList.begin() + selectedObj);
+				selectedObj = -1;
+			}
 			
 			ImGui::Begin("Inspector");
 			if (selectedObj > -1) {
@@ -193,7 +189,7 @@ namespace ENG {
 
 				obj->material.color = Editor::ColorField("Color", obj->material.color);
 				
-				ImGui::Image((void*)(intptr_t)(obj->material.texture->ID), {125, 125});
+				Editor::ImageField(obj->material.texture);
 			}
 			ImGui::End();
 
