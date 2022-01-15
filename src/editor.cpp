@@ -37,6 +37,10 @@ namespace ENG::Editor {
 		ImGui::NewFrame();
 	}
 
+	void Label (const char* label) {
+		ImGui::LabelText(label, "");
+	}
+
 	void ImageField (Texture* texture) {
 		ImGui::Image((void*)(intptr_t)(texture->ID), {80, 80}, {0,1}, {1,0});
 	}

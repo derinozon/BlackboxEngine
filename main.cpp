@@ -11,18 +11,14 @@ void crate () {
 	ent->material = Material(defaultShader, crateTex);
 }
 
-void box () {
-	Entity* ent = CreateQuad("Box");
-}
-
 int main() {
 	#ifdef WIN
 	resFolder = "C:\\Users\\admin\\Documents\\Github\\BlackboxEngine\\res\\";
 	#endif
 	Window* window = ENG::init("Blackbox Engine");
+	
 	crate();
 	
-	//box();
 	GameLoop = []() {
 		float speed = 10.0f * Time.deltaTime;
 		

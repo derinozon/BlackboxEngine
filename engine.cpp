@@ -151,8 +151,6 @@ namespace ENG {
 			for (int i = 0; i < entityList.size(); i++) {
 				if ( ImGui::Selectable((entityList[i]->name + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
 					selectedObj = i;
-					
-					
 				}
 				// ImGui::OpenPopupOnItemClick();
 				// if (ImGui::MenuItem("Delete")) {
@@ -173,10 +171,13 @@ namespace ENG {
 			// }
 			ImGui::End();
 
-			if (Input.GetKey(GLFW_KEY_LEFT_SUPER) && Input.GetKey(GLFW_KEY_BACKSPACE) && selectedObj>-1) {
+			bool cmd = Input.GetKey(GLFW_KEY_LEFT_SUPER) || Input.GetKey(GLFW_KEY_RIGHT_SUPER);
+			if (cmd && Input.GetKey(GLFW_KEY_BACKSPACE) && selectedObj>-1) {
 				delete entityList[selectedObj];
-				entityList.erase(entityList.begin() + selectedObj);
 				selectedObj = -1;
+			}
+			if (cmd && Input.GetKey(GLFW_KEY_S)) {
+				Serialize();
 			}
 			
 			ImGui::Begin("Inspector");
@@ -189,6 +190,7 @@ namespace ENG {
 
 				obj->material.color = Editor::ColorField("Color", obj->material.color);
 				
+				Editor::Label("Image");
 				Editor::ImageField(obj->material.texture);
 			}
 			ImGui::End();
@@ -203,7 +205,6 @@ namespace ENG {
 		
 		#ifdef __EMSCRIPTEN__
 		emscripten_set_main_loop(loop, 0, 1);
-		std::cout << "WEB" << std::endl;
 		#else
 		while (!glfwWindowShouldClose(window->Get())) {
 			loop();

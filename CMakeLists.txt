@@ -64,10 +64,13 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	link_directories("/usr/local/Cellar/assimp/5.0.1/lib")
 endif()
 
-
-
 # BUILD ENGINE AS SHARED LIBRARY #
-add_library(main SHARED engine.cpp ${src})
+# add_library(main SHARED engine.cpp ${src})
+# target_include_directories(main PUBLIC ./include ./src)
+# target_link_libraries(main PRIVATE glfw ${ASSIMP_LIBRARIES})
+
+# BUILD ENGINE AS STATIC LIBRARY #
+add_library(main STATIC engine.cpp ${src})
 target_include_directories(main PUBLIC ./include ./src)
 target_link_libraries(main PRIVATE glfw ${ASSIMP_LIBRARIES})
 

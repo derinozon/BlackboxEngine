@@ -21,12 +21,11 @@
 #include "texture.h"
 
 namespace ENG::Editor {
-	// inline ImGuiIO io;
-
 	ImGuiIO& InitEditor(Window* window);
 	void DestroyEditor();
 	void Render();
 	void NewFrame();
+	void Label (const char* label);
 	void ImageField(Texture* texture);
 	glm::vec3 DragFloat3 (const char* label, glm::vec3 vec, float speed = 0.05);
 	glm::vec4 ColorField (const char* label, glm::vec4 color);

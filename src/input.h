@@ -57,6 +57,10 @@ namespace ENG {
 			return glfwGetKey(window, key) == GLFW_PRESS;
 		}
 
+		bool GetKeyUp (int key) {
+			return glfwGetKey(window, key) == GLFW_RELEASE;
+		}
+
 		float GetAxisHorizontal () {
 			bool left = GetKey(GLFW_KEY_A)||GetKey(GLFW_KEY_LEFT);
 			bool right = GetKey(GLFW_KEY_D)||GetKey(GLFW_KEY_RIGHT);
