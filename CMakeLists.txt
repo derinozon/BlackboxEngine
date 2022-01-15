@@ -3,7 +3,8 @@
 
 cmake_minimum_required(VERSION 3.21)
 set (CMAKE_CXX_STANDARD 17)
-set (CMAKE_BUILD_TYPE Debug)
+# set (CMAKE_BUILD_TYPE Debug)
+set (CMAKE_BUILD_TYPE Release)
 # set(CMAKE_TOOLCHAIN_FILE "/usr/local/Cellar/vcpkg/2021.05.12/libexec/scripts/buildsystems/vcpkg.cmake")
 project(main)
 
@@ -76,3 +77,7 @@ link_directories("./build")
 add_executable(app main.cpp)
 target_include_directories(app PUBLIC ./ ./include ./src)
 target_link_libraries(app PRIVATE main glfw ${ASSIMP_LIBRARIES})
+
+if (WIN32)
+target_link_options(app PRIVATE -mwindows)
+endif (WIN32)
