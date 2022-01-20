@@ -51,7 +51,7 @@ namespace ENG {
 			const char* name = "Entity";
 			#endif
 			Entity* ent = CreateQuad(name);
-			ent->material.texture = Resources::Load<Texture>(paths[0]);
+			ent->material.texture = new Texture(paths[0]);
 		};
 
 		glfwSetDropCallback(window->Get(), drop_callback);

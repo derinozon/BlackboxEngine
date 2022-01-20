@@ -4,7 +4,7 @@ using namespace ENG;
 using namespace glm;
 
 void crate () {
-	Texture* crateTex = Resources::Load<Texture>("crate.png");
+	Texture* crateTex = Resources::LoadTexture("crate.png");
 	Entity* ent = CreateQuad("Crate");
 	
 	ent->transform = {vec3(0, 0, -1), vec3(0,0,45), vec3(3,3,3)};
