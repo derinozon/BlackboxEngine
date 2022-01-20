@@ -15,6 +15,9 @@ namespace ENG {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		std::cout << "Init success" << std::endl;
 		
+		#ifdef __EMSCRIPTEN__
+		// emscripten_get_canvas_size()
+		#endif
 		Window* window = new Window(title, width, height, fullscreen);
 		
 		if (window->Get() == NULL) {
