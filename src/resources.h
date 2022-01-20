@@ -22,7 +22,7 @@ namespace ENG {
 	#ifndef WIN
 	static fs::path resFolder = fs::current_path() / fs::path("res");
 	#else
-	static std::string resFolder = "./res/";
+	static std::string resFolder = std::string(DG_GetExecutableDir()) + "res\\";
 	#endif
 	
 	namespace Resources {

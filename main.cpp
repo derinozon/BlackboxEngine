@@ -12,9 +12,12 @@ void crate () {
 }
 
 int main() {
+	/*
 	#ifdef WIN
 	resFolder = "C:\\Users\\admin\\Documents\\Github\\BlackboxEngine\\res\\";
 	#endif
+	*/
+	Log(resFolder);
 	Window* window = ENG::init("Blackbox Engine");
 	
 	crate();

@@ -25,6 +25,7 @@
 // #include <assimp/scene.h>
 // #include <assimp/postprocess.h>
 #endif
+#include "include/DG/DG_misc.h"
 
 #include "src/window.h"
 

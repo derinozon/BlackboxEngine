@@ -44,7 +44,7 @@ namespace ENG {
 
 		std::cout << "Viewport success" << std::endl;
 
-		auto drop_callback = [] (GLFWwindow* window, int count, const char** paths) {
+		GLFWdropfun drop_callback = [] (GLFWwindow* window, int count, const char** paths) {
 			#ifndef WIN
 			const char* name = fs::path(paths[0]).filename().c_str();
 			#else
