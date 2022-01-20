@@ -3,53 +3,21 @@
 #include "transform.h"
 #include "mesh.h"
 
-/*
-namespace glm {
-    void to_json(nlohmann::json& j, const vec2& P) {
-        j = { { "x", P.x }, { "y", P.y } };
-    };
-
-    void from_json(const nlohmann::json& j, vec2& P) {
-        P.x = j.at("x").get<double>();
-        P.y = j.at("y").get<double>();
-    }
-
-	void to_json(nlohmann::json& j, const vec3& P) {
-        j = { { "x", P.x }, { "y", P.y }, { "z", P.z } };
-    };
-
-    void from_json(const nlohmann::json& j, vec3& P) {
-        P.x = j.at("x").get<double>();
-        P.y = j.at("y").get<double>();
-		P.z = j.at("z").get<double>();
-    }
-}
-
 namespace ENG {
-	// void to_json(nlohmann::json& j, const Mesh& P) {
-    //     j = { "resourceHandle", P.resourceHandle };
-    // };
 
-    // void from_json(const nlohmann::json& j, Mesh& P) {
-    //     P.resourceHandle = j.at("resourceHandle").get<std::string>();
-    // }
-}
 
-namespace ENG {
-	void LoadScene (const char* path) {
-		std::string json_output;
-		std::ifstream infile(path);
-		infile >> json_output;
-		infile.close();
+	void LevelSerialize () {
+		JSON_Value *root_value = json_value_init_object();
+		JSON_Object *root_object = json_value_get_object(root_value);
+		char *serialized_string = NULL;
+		json_object_set_string(root_object, "name", "John Smith");
+		json_object_set_number(root_object, "age", 25);
+		json_object_dotset_string(root_object, "address.city", "Cupertino");
+		json_object_dotset_value(root_object, "contact.emails", json_parse_string("[\"email@example.com\",\"email2@example.com\"]"));
+		serialized_string = json_serialize_to_string_pretty(root_value);
+		puts(serialized_string);
+		json_free_serialized_string(serialized_string);
+		json_value_free(root_value);
 	}
 
-	void SaveScene (const char* path) {
-		nlohmann::json j = *ent;
-		
-		std::ofstream outfile(path);
-		// Loop Through the scene //
-		outfile << j;
-		outfile.close();
-	}
 }
-*/
