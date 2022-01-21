@@ -14,6 +14,7 @@ namespace ENG {
 	Material::Material (const char* texturePath) {
 		this->shader = nullptr;
 		this->texturePath = texturePath;
+		this->texture = Resources::LoadTexture(texturePath);
 	}
 
 	Material::~Material() {

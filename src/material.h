@@ -4,6 +4,7 @@
 #include "shader.h"
 #include "color.h"
 #include "debug.h"
+#include "resources.h"
 
 namespace ENG {
 	class Material {

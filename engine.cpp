@@ -48,11 +48,7 @@ namespace ENG {
 		std::cout << "Viewport success" << std::endl;
 
 		GLFWdropfun drop_callback = [] (GLFWwindow* window, int count, const char** paths) {
-			#ifndef WIN
-			const char* name = fs::path(paths[0]).filename().c_str();
-			#else
-			const char* name = "Entity";
-			#endif
+			const char* name = paths[0];
 			Entity* ent = CreateQuad(name);
 			ent->material.texture = new Texture(paths[0]);
 		};

@@ -12,7 +12,8 @@ namespace ENG {
 		}
 
 		Texture* LoadTexture (const char* path) {
-			return new Texture((resFolder+path).c_str());
+			Texture* tex = new Texture((resFolder+path).c_str());
+			return tex;
 		}
 
 	}

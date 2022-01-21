@@ -6,7 +6,6 @@
 #include "../include/DG/DG_misc.h"
 
 #include "mesh.h"
-#include "entity.h"
 
 namespace ENG {
 	

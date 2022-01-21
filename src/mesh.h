@@ -12,14 +12,12 @@ namespace ENG {
 		glm::vec3 Position;
 		glm::vec3 Normal;
 		glm::vec2 TexCoords;
-
-		// NLOHMANN_DEFINE_TYPE_INTRUSIVE(Vertex, Position, Normal, TexCoords)
 	};
 
 	class Mesh {
 		public:
 			// mesh data
-			std::vector<Vertex>       vertices;
+			std::vector<Vertex> vertices;
 			std::vector<unsigned int> indices;
 			std::string resourceHandle;
 			//std::vector<Texture>      textures;
@@ -31,8 +29,6 @@ namespace ENG {
 			void Draw(Shader &shader);
 
 			void setupMesh();
-
-			// NLOHMANN_DEFINE_TYPE_INTRUSIVE(Mesh, resourceHandle)
 
 		private:
 			//  render data
