@@ -2,10 +2,8 @@
 
 #include <vector>
 #include <glm/glm.hpp>
-// #include <nlohmann/json.hpp>
 
 #include "texture.h"
-#include "serialization.h"
 
 namespace ENG {
 	struct Vertex {

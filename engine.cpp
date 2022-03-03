@@ -179,9 +179,6 @@ namespace ENG {
 				delete entityList[selectedObj];
 				selectedObj = -1;
 			}
-			if (cmd && Input.GetKey(GLFW_KEY_S)) {
-				Serialize();
-			}
 			
 			ImGui::Begin("Inspector");
 			if (selectedObj > -1) {

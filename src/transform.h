@@ -1,9 +1,6 @@
 #pragma once
 
-// #include <nlohmann/json.hpp>
 #include <glm/glm.hpp>
-
-#include "serialization.h"
 
 namespace ENG {
 	struct Transform {
@@ -17,7 +14,5 @@ namespace ENG {
 			rotation = rot;
 			scale = scl;
 		}
-
-		// NLOHMANN_DEFINE_TYPE_INTRUSIVE(Transform, position, rotation, scale)
 	};
 }
