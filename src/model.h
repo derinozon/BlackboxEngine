@@ -89,8 +89,7 @@ namespace ENG {
 		
 		// process each mesh located at the current node
 		std::cout << "Process Node" << std::endl;
-		for(unsigned int i = 0; i < node->mNumMeshes; i++)
-		{
+		for(unsigned int i = 0; i < node->mNumMeshes; i++) {
 			// the node object only contains indices to index the actual objects in the scene. 
 			// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
@@ -101,8 +100,7 @@ namespace ENG {
 			mainModel.transformations.push_back(t);
 		}
 		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
-		for(unsigned int i = 0; i < node->mNumChildren; i++)
-		{
+		for(unsigned int i = 0; i < node->mNumChildren; i++) {
 			processNode(node->mChildren[i], scene);
 		}
 

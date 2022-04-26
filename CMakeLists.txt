@@ -33,12 +33,12 @@ FetchContent_Declare(
         GIT_REPOSITORY https://github.com/assimp/assimp
 )
 
-FetchContent_GetProperties(assimp)
-if(NOT glfw_POPULATED)
-    FetchContent_Populate(assimp)
-
-    add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
-endif()
+# FetchContent_GetProperties(assimp)
+# if(NOT glfw_POPULATED)
+#     FetchContent_Populate(assimp)
+# 
+#     add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
+# endif()
 
 # FIND PACKAGES #
 # find_package(glfw3 CONFIG REQUIRED)

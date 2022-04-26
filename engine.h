@@ -57,4 +57,5 @@ namespace ENG {
 	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false, bool vsync = true);
 	inline Window* currentWindow;
 	inline void (*GameLoop)(void) = [](){};
+	inline void (*OnDrawGUI)(void) = [](){};
 }
