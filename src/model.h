@@ -79,13 +79,13 @@ namespace ENG {
 			}
 			return Mesh(vertices, indices);
 	}
-	struct Model {
+	inline struct Model {
 		std::vector<Mesh> meshes;
 		std::vector<Transform> transformations;
 	} mainModel;
 	
 	
-	Model processNode(aiNode *node, const aiScene *scene) {
+	inline Model processNode(aiNode *node, const aiScene *scene) {
 		
 		// process each mesh located at the current node
 		std::cout << "Process Node" << std::endl;

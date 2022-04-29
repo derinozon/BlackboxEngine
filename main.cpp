@@ -11,56 +11,6 @@ void crate () {
 	ent->transform = {vec3(0, 0, -1.5), vec3(0,0,45), vec3(3,3,3)};
 	ent->material = Material("crate.png");
 }
-/*
-void LoadObj2 () {
-	std::string inputfile = resFolder + "teapot.obj";
-	//inputfile = "/Users/machina/Documents/GitHub/BlackboxEngine/build/res/teapot.obj";
-	Log(inputfile);
-	tinyobj::attrib_t attrib;
-	std::vector<tinyobj::shape_t> shapes;
-	std::vector<tinyobj::material_t> materials;
-
-	std::string warn;
-	std::string err;
-
-	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str());
-
-	if (!warn.empty()) {
-	std::cout << warn << std::endl;
-	}
-
-	if (!err.empty()) {
-	std::cerr << err << std::endl;
-	}
-
-	if (!ret) {
-	exit(1);
-	}
-
-	std::vector<Vertex> vertices;
-	std::vector<uint32_t> indices;
-	std::unordered_map<glm::vec3, uint32_t> uniqueVertices;
-
-	for (const auto& shape : shapes)
-	{
-		for (const auto& index : shape.mesh.indices)
-		{
-			glm::vec3 position{
-				attrib.vertices[3 * index.vertex_index + 0],
-				attrib.vertices[3 * index.vertex_index + 1],
-				attrib.vertices[3 * index.vertex_index + 2]};
-
-			if (uniqueVertices.count(position) == 0)
-			{
-				uniqueVertices[position] = static_cast<uint32_t>(vertices.size());
-				vertices.push_back(Vertex{position});
-			}
-
-			indices.push_back(uniqueVertices[position]);
-		}
-	}
-}
-*/
 
 void LoadObj () {
 	std::string inputfile = resFolder + "teapot.obj";
@@ -158,8 +108,18 @@ void LoadObj () {
 int main() {
 	Window* window = ENG::init("Blackbox Engine");
 	
-	// crate();
-	LoadObj();
+	crate();
+
+	Assimp::Importer importer;
+	std::string inputFile = resFolder + "teapot.obj";
+	const aiScene *scene = importer.ReadFile(inputFile, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	Model m = processNode(scene->mRootNode ,scene);
+	auto teapot = CreateQuad("Teapot");
+	teapot->mesh = m.meshes[0];
+	teapot->material = Material("crate.png");
+
+	// LoadObj();
 	
 	GameLoop = []() {
 		float speed = 10.0f * Time.deltaTime;

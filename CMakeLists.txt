@@ -28,17 +28,27 @@ if(NOT glfw_POPULATED)
     add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 endif()
 
-FetchContent_Declare(
-        assimp
-        GIT_REPOSITORY https://github.com/assimp/assimp
-)
+# FetchContent_Declare(
+#         assimp
+#         GIT_REPOSITORY https://github.com/assimp/assimp
+# )
+# 
+# FetchContent_GetProperties(assimp)
+# if(NOT glfw_POPULATED)
+#     FetchContent_Populate(assimp)
+# 
+#     add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
+# endif()
 
-# FetchContent_GetProperties(assimp)
-# if(NOT glfw_POPULATED)
-#     FetchContent_Populate(assimp)
-# 
-#     add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
-# endif()
+FetchContent_Declare(
+	assimp
+	GIT_REPOSITORY https://github.com/assimp/assimp.git
+)
+FetchContent_GetProperties(assimp)
+if(NOT assimp_POPULATED)
+	FetchContent_Populate(assimp)
+	add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
+endif()
 
 # FIND PACKAGES #
 # find_package(glfw3 CONFIG REQUIRED)
@@ -72,8 +82,8 @@ endif()
 
 # BUILD ENGINE AS STATIC LIBRARY #
 add_library(main STATIC engine.cpp ${src})
-target_include_directories(main PUBLIC ./include ./src)
-target_link_libraries(main PRIVATE glfw ${ASSIMP_LIBRARIES})
+target_include_directories(main PUBLIC ./include ./src ${assimp_SOURCE_DIR} ./build/_deps/assimp-src/include ./build/_deps/assimp-build/include)
+target_link_libraries(main PRIVATE glfw assimp ${ASSIMP_LIBRARIES})
 
 # BUILD DEMO EXECUTABLE #
 link_directories("./build")
