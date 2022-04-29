@@ -65,7 +65,7 @@ namespace ENG {
 					*/
 				}
 				else
-					vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+					vertex.TexCoords = glm::vec2(0.4f, 0.4f);
 
 				vertices.push_back(vertex);
 			}
