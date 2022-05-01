@@ -18,27 +18,16 @@ FetchContent_Declare(
 	glfw
 	GIT_REPOSITORY https://github.com/glfw/glfw
 )
-
 FetchContent_GetProperties(glfw)
 if(NOT glfw_POPULATED)
     FetchContent_Populate(glfw)
 
-    # set(GLFW_BUILD_EXAMPLES OFF CACHE INTERNAL "Build the GLFW example programs")
-    # set(GLFW_BUILD_TESTS OFF CACHE INTERNAL "Build the GLFW test programs")
-    # set(GLFW_BUILD_DOCS OFF CACHE INTERNAL "Build the GLFW documentation")
-    # set(GLFW_INSTALL OFF CACHE INTERNAL "Generate installation target")
+    set(GLFW_BUILD_EXAMPLES FALSE)
+	set(GLFW_BUILD_TESTS FALSE)
+	set(GLFW_BUILD_DOCS FALSE)
 
     add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 endif()
-
-set(BUILD_SHARED_LIBS FALSE)
-set(ASSIMP_NO_EXPORT TRUE)
-set(ASSIMP_BUILD_ASSIMP_TOOLS FALSE)
-set(ASSIMP_BUILD_TESTS FALSE)
-set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT FALSE)
-set(ASSIMP_BUILD_GLTF_IMPORTER TRUE)
-set(ASSIMP_BUILD_FBX_IMPORTER TRUE)
-set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
 
 FetchContent_Declare(
 	assimp
@@ -47,6 +36,16 @@ FetchContent_Declare(
 FetchContent_GetProperties(assimp)
 if(NOT assimp_POPULATED)
 	FetchContent_Populate(assimp)
+
+	set(BUILD_SHARED_LIBS FALSE)
+	set(ASSIMP_NO_EXPORT TRUE)
+	set(ASSIMP_BUILD_ASSIMP_TOOLS FALSE)
+	set(ASSIMP_BUILD_TESTS FALSE)
+	set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT FALSE)
+	set(ASSIMP_BUILD_GLTF_IMPORTER TRUE)
+	set(ASSIMP_BUILD_FBX_IMPORTER TRUE)
+	set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
+
 	add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
 endif()
 
