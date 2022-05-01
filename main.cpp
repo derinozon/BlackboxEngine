@@ -1,15 +1,16 @@
 #include "engine.h"
-#include "tiny_obj_loader.h"
-#include <unordered_map>
+// #include "tiny_obj_loader.h"
+// #include <unordered_map>
 
 using namespace ENG;
 using namespace glm;
 
-void crate () {
+Entity* crate () {
 	Entity* ent = CreateQuad("Crate");
 	
 	ent->transform = {vec3(0, 0, -1.5), vec3(0,0,45), vec3(3,3,3)};
 	ent->material = Material("crate.png");
+	return ent;
 }
 
 Entity* load3d (const char* modelPath, const char* texturePath) {
@@ -25,11 +26,13 @@ Entity* load3d (const char* modelPath, const char* texturePath) {
 	return object;
 }
 
+
 int main() {
 	Window* window = ENG::init("Blackbox Engine");
 	
 	//load3d("fish/fish1.fbx", "fish/fish1_tex.png");
 	Entity* obj = load3d("coral/coral.fbx", "coral/base.png");
+	//Entity* obj = crate();
 	obj->transform.rotation = vec3(-90,0,0);
 	obj->transform.scale = vec3(0.1,0.1,0.1);
 	
