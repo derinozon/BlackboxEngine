@@ -93,7 +93,8 @@ namespace ENG {
 
 			
 			Editor::NewFrame();
-			OnDrawGUI();
+			
+			OnDrawGUI.Invoke();
 
 			camera.UpdateMatrix();
 
@@ -155,23 +156,7 @@ namespace ENG {
 				if ( ImGui::Selectable((entityList[i]->name + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
 					selectedObj = i;
 				}
-				// ImGui::OpenPopupOnItemClick();
-				// if (ImGui::MenuItem("Delete")) {
-				// 			CreateQuad();
-				// 		}
-				if (ImGui::IsItemClicked(1)) {
-					// if (ImGui::OpenPopup()) {
-					// 	if (ImGui::MenuItem("Delete")) {
-					// 		CreateQuad();
-					// 	}
-
-					// 	ImGui::EndPopup();
-					// }
-				}
 			}
-			// if (ImGui::Button("New Sprite")) {
-			// 	std::string label = "Quad";
-			// }
 			ImGui::End();
 
 			bool cmd = Input.GetKey(GLFW_KEY_LEFT_SUPER) || Input.GetKey(GLFW_KEY_RIGHT_SUPER);

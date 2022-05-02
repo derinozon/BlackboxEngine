@@ -50,6 +50,24 @@
 #include "src/primitive.h"
 
 namespace ENG {
+	class Action {
+		public:
+			Action () {
+				
+			}
+
+			void Invoke () {
+				for (auto func : functions) {
+					func();
+				}
+			}
+
+			void Add (void (*func)(void)) {
+				functions.push_back(func);
+			}
+		private:
+			std::vector< void (*)(void) > functions;
+	};
 	inline InputManager& Input = InputManager::Get();
 	inline Shader* defaultShader;
 	inline Camera camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
@@ -58,5 +76,6 @@ namespace ENG {
 	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false, bool vsync = true);
 	inline Window* currentWindow;
 	inline void (*GameLoop)(void) = [](){};
-	inline void (*OnDrawGUI)(void) = [](){};
+	// inline void (*OnDrawGUI)(void) = [](){};
+	inline Action OnDrawGUI = Action();
 }

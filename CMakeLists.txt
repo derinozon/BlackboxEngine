@@ -10,7 +10,7 @@ if(NOT WIN32)
 	string(ASCII 27 Esc)
 	set(ColorReset "${Esc}[m")
 	set(ColorBold  "${Esc}[1m")
-	set(BoldCyan    "${Esc}[1;36m")
+	set(BoldCyan   "${Esc}[1;36m")
 endif()
 message("${BoldCyan}Building dependencies, this might take a while${ColorReset}")
 
@@ -55,14 +55,15 @@ include_directories(${ASSIMP_INCLUDE_DIR})
 file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/ImGUI/*.cpp")
 
 # BUILD ENGINE AS STATIC LIBRARY #
+#STATIC
 add_library(blackbox STATIC engine.cpp ${src})
 target_include_directories(blackbox PUBLIC ./include ./src ${assimp_SOURCE_DIR} ./build/_deps/assimp-src/include ./build/_deps/assimp-build/include) #
-target_link_libraries(blackbox PRIVATE glfw assimp ${ASSIMP_LIBRARIES})
-
+target_link_libraries(blackbox PUBLIC glfw assimp ${ASSIMP_LIBRARIES})
+message("ASDF ${assimp_SOURCE_DIR}")
 # BUILD DEMO EXECUTABLE #
 link_directories("./build")
 add_executable(app main.cpp)
-target_link_libraries(app PRIVATE blackbox)
+target_link_libraries(app PUBLIC blackbox)
 
 #if (WIN32)
 #target_link_options(app PRIVATE -mwindows)

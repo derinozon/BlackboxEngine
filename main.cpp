@@ -1,4 +1,5 @@
 #include "engine.h"
+
 // #include "tiny_obj_loader.h"
 // #include <unordered_map>
 
@@ -26,30 +27,32 @@ Entity* load3d (const char* modelPath, const char* texturePath) {
 	return object;
 }
 
-
+bool wireframe;
+bool vsync = true;
 int main() {
 	Window* window = ENG::init("Blackbox Engine");
 	
-<<<<<<< HEAD
 	// crate();
-	LoadObj();
-
 	
-
-	OnDrawGUI = []() {
-		int val = 1;
-
+	
+	
+	OnDrawGUI.Add( []() {
 		ImGui::Begin("Debug");
-		Editor::IntField("Index Mult.", &val);
+		std::string fps = "FPS : " + std::to_string( (int)(1.0/Time.deltaTime) );
+		Editor::Label(fps.c_str());
+		if (Editor::ToggleField("Vsync", &vsync) ) {
+			glfwSwapInterval(vsync ? 60 : 0);
+		}
+		if (Editor::ToggleField("Wireframe", &wireframe) ) {
+			glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
+		}
 		ImGui::End();
-	};
-=======
+	} );
 	//load3d("fish/fish1.fbx", "fish/fish1_tex.png");
 	Entity* obj = load3d("coral/coral.fbx", "coral/base.png");
 	//Entity* obj = crate();
 	obj->transform.rotation = vec3(-90,0,0);
 	obj->transform.scale = vec3(0.1,0.1,0.1);
->>>>>>> 5388571b960a649d9cefed062189b5232ff2679a
 	
 	GameLoop = []() {
 		float speed = 10.0f * Time.deltaTime;

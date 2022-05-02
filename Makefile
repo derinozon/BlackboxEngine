@@ -3,26 +3,27 @@ CCV = -std=c++17
 WC = em++
 WSHELL = --shell-file res/shell.html
 WBIND = -O0 --bind -s USE_GLFW=3 -s SINGLE_FILE=1 -s ALLOW_MEMORY_GROWTH=1
-WINCLUDE = -I"/usr/local/Cellar/glm/0.9.9.8/include" -I./include -I./lib/ImGUI -I/usr/local/include/
+WINCLUDE = -I"/usr/local/Cellar/glm/0.9.9.8/include" -I./include -I./lib/ImGUI -I/usr/local/include/ -I./build/_deps/assimp-src/include -I./build/_deps/assimp-build/include -I./build/_deps/assimp-src
 WFILE = --preload-file ./res --use-preload-plugins
 WDEBUG = -g4 -s ASSERTIONS=2 -s SAFE_HEAP=1 -s STACK_OVERFLOW_CHECK=1
 
 SRC_FILES := $(wildcard src/*.cpp lib/*.cpp lib/ImGUI/*.cpp)
 
 IN = main.cpp engine.cpp
+LIBB = -L./build/_deps/assimp-build/lib/
 
 web: main.cpp $(SRC_FILES)
 	mkdir -p build
-	$(WC) $(CCV) $(IN) $(SRC_FILES) $(WINCLUDE) $(WBIND) -s MAX_WEBGL_VERSION=2 $(WSHELL) $(WFILE) -o build/index.html
+	$(WC) $(CCV) $(IN) $(SRC_FILES) $(LIBB) -lassimpd $(WINCLUDE) $(WBIND) -s MAX_WEBGL_VERSION=2 $(WSHELL) $(WFILE) -o build/index.html
 #-s ASSERTIONS=1 -s SAFE_HEAP=1 -s LLD_REPORT_UNDEFINED -s USE_FREETYPE=1
 
 # Make this work in the future!
 webs: main.cpp $(SRC_FILES)
-	mkdir -p build
-	$(WC) $(CCV) main.cpp -L"build/blackbox.a" -I. $(WINCLUDE) $(WBIND) -s MAX_WEBGL_VERSION=2 $(WSHELL) $(WFILE) -o build/index.html
+	mkdir -p build    
+	$(WC) $(CCV) main.cpp $(WINCLUDE) -L./build -lblackboxd $(WBIND) -s MAX_WEBGL_VERSION=2 $(WSHELL) $(WFILE) -o build/index.html -s LLD_REPORT_UNDEFINED
 #-s FULL_ES2=1
 
 # not working
-webd: main.cpp $(SRC_FILES)
+webd: main.cpp
 	mkdir -p build
-	$(WC) $(CCV) $(IN) $(SRC_FILES) $(WINCLUDE) $(WBIND) -s FULL_ES2=1 $(WSHELL) $(WFILE) -o build/index.html
+	g++ $(CCV) main.cpp $(WINCLUDE) -L./build/ -lblackboxd

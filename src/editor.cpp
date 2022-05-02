@@ -15,6 +15,10 @@ namespace ENG::Editor {
 		ImGui_ImplOpenGL3_Init("#version 330");
 		#endif
 
+		// OnDrawGUI.Add( []() {
+		// 	Log("asdf");
+		// } );
+
 		Log("Editor Initialized");
 
 		return io;
@@ -43,6 +47,10 @@ namespace ENG::Editor {
 
 	void IntField (const char* label, int* val) {
 		ImGui::InputInt(label, val);
+	}
+
+	bool ToggleField (const char* label, bool* val) {
+		return ImGui::Checkbox(label, val);
 	}
 
 	void ImageField (Texture* texture) {
