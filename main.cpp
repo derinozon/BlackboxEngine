@@ -105,6 +105,16 @@ int main() {
 	
 	// crate();
 	LoadObj();
+
+	
+
+	OnDrawGUI = []() {
+		int val = 1;
+
+		ImGui::Begin("Debug");
+		Editor::IntField("Index Mult.", &val);
+		ImGui::End();
+	};
 	
 	GameLoop = []() {
 		float speed = 10.0f * Time.deltaTime;

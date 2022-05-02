@@ -93,7 +93,7 @@ namespace ENG {
 
 			
 			Editor::NewFrame();
-			
+			OnDrawGUI();
 
 			camera.UpdateMatrix();
 

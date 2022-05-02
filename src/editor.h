@@ -26,6 +26,7 @@ namespace ENG::Editor {
 	void Render();
 	void NewFrame();
 	void Label (const char* label);
+	void IntField (const char* label, int* val);
 	void ImageField(Texture* texture);
 	glm::vec3 DragFloat3 (const char* label, glm::vec3 vec, float speed = 0.05);
 	glm::vec4 ColorField (const char* label, glm::vec4 color);

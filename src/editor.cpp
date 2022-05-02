@@ -14,7 +14,7 @@ namespace ENG::Editor {
 		#else
 		ImGui_ImplOpenGL3_Init("#version 330");
 		#endif
-		
+
 		Log("Editor Initialized");
 
 		return io;
@@ -39,6 +39,10 @@ namespace ENG::Editor {
 
 	void Label (const char* label) {
 		ImGui::LabelText(label, "");
+	}
+
+	void IntField (const char* label, int* val) {
+		ImGui::InputInt(label, val);
 	}
 
 	void ImageField (Texture* texture) {
