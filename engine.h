@@ -40,6 +40,7 @@
 #include "src/material.h"
 #include "src/transform.h"
 
+#include "src/model.h"
 #include "src/resources.h"
 #include "src/shader.h"
 #include "src/camera.h"

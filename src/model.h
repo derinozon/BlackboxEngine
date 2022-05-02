@@ -65,7 +65,7 @@ namespace ENG {
 					*/
 				}
 				else
-					vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+					vertex.TexCoords = glm::vec2(0.4f, 0.4f);
 
 				vertices.push_back(vertex);
 			}
@@ -79,13 +79,13 @@ namespace ENG {
 			}
 			return Mesh(vertices, indices);
 	}
-	struct Model {
+	inline struct Model {
 		std::vector<Mesh> meshes;
 		std::vector<Transform> transformations;
 	} mainModel;
 	
 	
-	Model processNode(aiNode *node, const aiScene *scene) {
+	inline Model processNode(aiNode *node, const aiScene *scene) {
 		
 		// process each mesh located at the current node
 		std::cout << "Process Node" << std::endl;
