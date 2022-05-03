@@ -21,11 +21,12 @@ namespace ENG::Editor {
 		auto Debug = []() {
 			ImGui::Begin("Debug");
 			std::string fps = "FPS : " + std::to_string( (int)(1.0/Time.deltaTime) );
-			Editor::Label(fps.c_str());
-			if (Editor::ToggleField("Vsync", &vsync) ) {
+			ImGui::Text("%s", fps.c_str());
+			
+			if (ToggleField("Vsync", &vsync) ) {
 				glfwSwapInterval(vsync ? 60 : 0);
 			}
-			if (Editor::ToggleField("Wireframe", &wireframe) ) {
+			if (ToggleField("Wireframe", &wireframe) ) {
 				glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 			}
 			ImGui::End();

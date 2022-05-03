@@ -1,4 +1,3 @@
-// #include "engine.h"
 #include "src/editor.h"
 
 using namespace ENG;
@@ -20,24 +19,26 @@ Entity* load3d (const char* modelPath, const char* texturePath) {
 
 	Model m = processNode(scene->mRootNode ,scene);
 	Entity* object = CreateQuad(modelPath);
-	object->mesh = m.meshes[0];
+	object->mesh = m.meshes[1];
 	object->material = Material(texturePath);
 	return object;
 }
-
 
 int main() {
 	Window* window = ENG::init("Blackbox Engine");
 	ImGuiIO& io = Editor::InitEditor(window);
 	
-	//load3d("fish/fish1.fbx", "fish/fish1_tex.png");
-	Entity* obj = load3d("coral/coral.fbx", "coral/base.png");
-	//Entity* obj = crate();
-	obj->transform.rotation = vec3(-90,0,0);
-	obj->transform.scale = vec3(0.1,0.1,0.1);
+	// load3d("fish/fish1.fbx", "fish/fish1_tex.png");
+
+	// Entity* obj = load3d("Test.fbx", "crate.png");
+	//Entity* obj = load3d("coral/coral.fbx", "coral/base.png");
+	//obj->transform.rotation = vec3(-90,0,0);
+	// obj->transform.scale = vec3(0.1,0.1,0.1);
+
+	Entity* obj = crate();
 	
 	OnUpdate += []() {
-		float speed = 10.0f * Time.deltaTime;
+		float speed = 10 * Time.deltaTime * (Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
 		
 		camera.Position += speed * glm::vec3(1,0,0) * Input.GetAxisHorizontal();
 		camera.Position += speed * glm::vec3(0,0,-1) * Input.GetAxisVertical();

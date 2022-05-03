@@ -1,15 +1,10 @@
 #pragma once
-#define EDITOR
 
 #ifdef __EMSCRIPTEN__
-    #include <emscripten.h>
+	#include <emscripten.h>
 	// #define GL_GLEXT_PROTOTYPES
 	// #define EGL_EGLEXT_PROTOTYPES
-#endif
-
-
-
-#ifdef __EMSCRIPTEN__
+	
 	#include <GL/gl.h>
 	#include <GLES3/gl3.h>
 #else
@@ -18,11 +13,6 @@
 
 #include <GLFW/glfw3.h>
 
-#ifndef __EMSCRIPTEN__
-// #include <assimp/Importer.hpp>
-// #include <assimp/scene.h>
-// #include <assimp/postprocess.h>
-#endif
 #include "include/DG/DG_misc.h"
 
 #include "src/window.h"
@@ -30,6 +20,7 @@
 #include "src/debug.h"
 
 // #include "serialization.h"
+#include "src/action.h"
 #include "src/gametime.h"
 #include "src/texture.h"
 
@@ -38,7 +29,6 @@
 #include "src/material.h"
 #include "src/transform.h"
 
-#include "src/model.h"
 #include "src/resources.h"
 #include "src/shader.h"
 #include "src/camera.h"
@@ -46,7 +36,7 @@
 #include "src/scene.h"
 #include "src/entity.h"
 #include "src/primitive.h"
-#include "src/action.h"
+#include "src/model.h"
 
 namespace ENG {
 	
