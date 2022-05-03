@@ -1,7 +1,10 @@
 #include "editor.h"
 
 namespace ENG::Editor {
-
+	bool wireframe;
+	bool vsync = true;
+	int selectedObj = -1;
+	
 	ImGuiIO& InitEditor (Window* window) {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -15,11 +18,74 @@ namespace ENG::Editor {
 		ImGui_ImplOpenGL3_Init("#version 330");
 		#endif
 
-		// OnDrawGUI.Add( []() {
-		// 	Log("asdf");
-		// } );
+		auto Debug = []() {
+			ImGui::Begin("Debug");
+			std::string fps = "FPS : " + std::to_string( (int)(1.0/Time.deltaTime) );
+			Editor::Label(fps.c_str());
+			if (Editor::ToggleField("Vsync", &vsync) ) {
+				glfwSwapInterval(vsync ? 60 : 0);
+			}
+			if (Editor::ToggleField("Wireframe", &wireframe) ) {
+				glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
+			}
+			ImGui::End();
+		};
+
+		auto Hierarchy = []() {
+			ImGui::Begin("Hierarchy");
+			if (ImGui::BeginPopupContextWindow()) {
+				if (ImGui::MenuItem("New Entity")) {
+					CreateQuad();
+				}
+
+				ImGui::EndPopup();
+			}
+			for (int i = 0; i < entityList.size(); i++) {
+				if ( ImGui::Selectable((entityList[i]->name + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
+					selectedObj = i;
+				}
+			}
+			ImGui::End();
+		};
+		
+		auto Inspector = []() {
+			ImGui::Begin("Inspector");
+			if (selectedObj > -1) {
+				Entity* obj = entityList[selectedObj];
+
+				obj->transform.position = Editor::DragFloat3("Position", obj->transform.position);
+				obj->transform.rotation = Editor::DragFloat3("Rotation", obj->transform.rotation, 0.5);
+				obj->transform.scale = Editor::DragFloat3("Scale", obj->transform.scale);
+
+				obj->material.color = Editor::ColorField("Color", obj->material.color);
+				
+				Editor::Label("Image");
+				Editor::ImageField(obj->material.texture);
+			}
+			ImGui::End();
+		};
+
+		OnUpdate += []() {
+			bool cmd = Input.GetKey(GLFW_KEY_LEFT_SUPER) || Input.GetKey(GLFW_KEY_RIGHT_SUPER);
+			if (cmd && Input.GetKey(GLFW_KEY_BACKSPACE) && selectedObj>-1) {
+				delete entityList[selectedObj];
+				selectedObj = -1;
+			}
+		};
+
+		OnDrawGUI += []() {
+			NewFrame();
+		};
+
+		OnDrawGUI += Debug;
+		OnDrawGUI += Hierarchy;
+		OnDrawGUI += Inspector;
 
 		Log("Editor Initialized");
+
+		// io.Fonts->AddFontFromFileTTF("../Roboto-Light.ttf", 13);
+		// ImGuiStyle& style = ImGui::GetStyle();
+		// style.ScaleAllSizes(0.1);
 
 		return io;
 	}
@@ -30,9 +96,16 @@ namespace ENG::Editor {
 		ImGui::DestroyContext();
 	}
 
+	// Call this once
 	void Render () {
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		OnDrawGUI += []() {
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		};
+		OnQuit += []() {
+			Log("Destroying Editor");
+			Editor::DestroyEditor();
+		};
 	}
 
 	void NewFrame () {

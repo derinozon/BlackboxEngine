@@ -4,6 +4,8 @@
 #define WIN
 #endif
 
+#include "../engine.h"
+
 #include "../lib/ImGUI/imgui.h"
 #include "../lib/ImGUI/imgui_impl_glfw.h"
 #include "../lib/ImGUI/imgui_impl_opengl3.h"
@@ -17,8 +19,8 @@
 
 #include <glm/glm.hpp>
 
-#include "window.h"
-#include "texture.h"
+// #include "window.h"
+// #include "texture.h"
 
 namespace ENG::Editor {
 	ImGuiIO& InitEditor(Window* window);

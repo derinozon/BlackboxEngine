@@ -66,47 +66,37 @@ namespace ENG {
 		return window;
 	}
 
-	int selectedObj = -1;
+	
 	int run (Window* window) {
 		// Enables the Depth Buffer
 		glEnable(GL_DEPTH_TEST);
 
-		ImGuiIO& io = Editor::InitEditor(window);
-		// io.Fonts->AddFontFromFileTTF("../Roboto-Light.ttf", 13);
-		ImGuiStyle& style = ImGui::GetStyle();
-		// style.ScaleAllSizes(0.1);
+		
 
 		auto loop = []{
 			Input.SetWindow(currentWindow->Get());
-			// CALCULATING DELTATIME //
+
+			// Calculate deltatime //
 			Time.time = glfwGetTime();
 			Time.deltaTime = Time.time - Time.lastFrameTime;
 			Time.lastFrameTime = Time.time;
 			
-			// Enable blending
+			// Enable blending //
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			
 			glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
-			// Clean the back buffer and depth buffer
+			// Clean the back buffer and depth buffer //
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			
-			Editor::NewFrame();
-			
-			OnDrawGUI.Invoke();
-
 			camera.UpdateMatrix();
+			OnUpdate.Invoke();
 
-			// (*GameLoop)();
-			GameLoop();
-
-			// Draw Meshes
+			// Draw Meshes //
 			for (Entity* obj: entityList) {
 				Transform& tr = obj->transform;
 				Mesh& vel = obj->mesh;
 				Material& mat = obj->material;
-				
 				
 				if (mat.shader == nullptr) mat.shader = defaultShader;
 				if (mat.texture == nullptr) {
@@ -120,7 +110,6 @@ namespace ENG {
 					mat.shader->UploadUniform1i("tex0", 0);
 					mat.texture->Bind();
 				}
-				
 				
 				// Generate Model Matrix from Transform //
 				glm::mat4 model = glm::mat4(1.0f);
@@ -143,44 +132,7 @@ namespace ENG {
 
 				vel.Draw(*mat.shader);
 			}
-			
-			ImGui::Begin("Hierarch");
-			if (ImGui::BeginPopupContextWindow()) {
-				if (ImGui::MenuItem("New Entity")) {
-					CreateQuad();
-				}
-
-				ImGui::EndPopup();
-			}
-			for (int i = 0; i < entityList.size(); i++) {
-				if ( ImGui::Selectable((entityList[i]->name + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
-					selectedObj = i;
-				}
-			}
-			ImGui::End();
-
-			bool cmd = Input.GetKey(GLFW_KEY_LEFT_SUPER) || Input.GetKey(GLFW_KEY_RIGHT_SUPER);
-			if (cmd && Input.GetKey(GLFW_KEY_BACKSPACE) && selectedObj>-1) {
-				delete entityList[selectedObj];
-				selectedObj = -1;
-			}
-			
-			ImGui::Begin("Inspector");
-			if (selectedObj > -1) {
-				Entity* obj = entityList[selectedObj];
-
-				obj->transform.position = Editor::DragFloat3("Position", obj->transform.position);
-				obj->transform.rotation = Editor::DragFloat3("Rotation", obj->transform.rotation, 0.5);
-				obj->transform.scale = Editor::DragFloat3("Scale", obj->transform.scale);
-
-				obj->material.color = Editor::ColorField("Color", obj->material.color);
-				
-				Editor::Label("Image");
-				Editor::ImageField(obj->material.texture);
-			}
-			ImGui::End();
-
-			Editor::Render();
+			OnDrawGUI.Invoke();
 			
 
 			glfwSwapBuffers(currentWindow->Get());
@@ -199,7 +151,8 @@ namespace ENG {
 		for (Entity* obj: entityList) {
 			delete obj;
 		};
-		Editor::DestroyEditor();
+
+		OnQuit.Invoke();
 
 		glfwDestroyWindow(window->Get());
 		glfwTerminate();

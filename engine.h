@@ -7,9 +7,7 @@
 	// #define EGL_EGLEXT_PROTOTYPES
 #endif
 
-#ifdef EDITOR
-#include "src/editor.h"
-#endif
+
 
 #ifdef __EMSCRIPTEN__
 	#include <GL/gl.h>
@@ -48,26 +46,10 @@
 #include "src/scene.h"
 #include "src/entity.h"
 #include "src/primitive.h"
+#include "src/action.h"
 
 namespace ENG {
-	class Action {
-		public:
-			Action () {
-				
-			}
-
-			void Invoke () {
-				for (auto func : functions) {
-					func();
-				}
-			}
-
-			void Add (void (*func)(void)) {
-				functions.push_back(func);
-			}
-		private:
-			std::vector< void (*)(void) > functions;
-	};
+	
 	inline InputManager& Input = InputManager::Get();
 	inline Shader* defaultShader;
 	inline Camera camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
@@ -75,7 +57,7 @@ namespace ENG {
 	int run(Window* window);
 	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false, bool vsync = true);
 	inline Window* currentWindow;
-	inline void (*GameLoop)(void) = [](){};
-	// inline void (*OnDrawGUI)(void) = [](){};
+	inline Action OnUpdate = Action();
 	inline Action OnDrawGUI = Action();
+	inline Action OnQuit = Action();
 }
