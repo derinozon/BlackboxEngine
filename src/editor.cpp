@@ -84,8 +84,10 @@ namespace ENG::Editor {
 
 		Log("Editor Initialized");
 
-		// io.Fonts->AddFontFromFileTTF("../Roboto-Light.ttf", 13);
-		// ImGuiStyle& style = ImGui::GetStyle();
+		// io.Fonts->AddFontFromFileTTF("./res/Roboto-Light.ttf", 12);
+		ImGuiStyle& style = ImGui::GetStyle();
+		
+		// io.DisplaySize = ImVec2(1600*2, 900*2);
 		// style.ScaleAllSizes(0.1);
 
 		return io;

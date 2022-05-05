@@ -33,18 +33,19 @@ FetchContent_Declare(
 	assimp
 	GIT_REPOSITORY https://github.com/assimp/assimp.git
 )
+
+set(BUILD_SHARED_LIBS FALSE)
+set(ASSIMP_NO_EXPORT TRUE)
+set(ASSIMP_BUILD_ASSIMP_TOOLS FALSE)
+set(ASSIMP_BUILD_TESTS FALSE)
+set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT FALSE)
+set(ASSIMP_BUILD_GLTF_IMPORTER TRUE)
+set(ASSIMP_BUILD_FBX_IMPORTER TRUE)
+set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
+
 FetchContent_GetProperties(assimp)
 if(NOT assimp_POPULATED)
 	FetchContent_Populate(assimp)
-
-	set(BUILD_SHARED_LIBS FALSE)
-	set(ASSIMP_NO_EXPORT TRUE)
-	set(ASSIMP_BUILD_ASSIMP_TOOLS FALSE)
-	set(ASSIMP_BUILD_TESTS FALSE)
-	set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT FALSE)
-	set(ASSIMP_BUILD_GLTF_IMPORTER TRUE)
-	set(ASSIMP_BUILD_FBX_IMPORTER TRUE)
-	set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
 
 	add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
 endif()
@@ -55,11 +56,10 @@ include_directories(${ASSIMP_INCLUDE_DIR})
 file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/ImGUI/*.cpp")
 
 # BUILD ENGINE AS STATIC LIBRARY #
-#STATIC
-add_library(blackbox STATIC engine.cpp ${src})
+add_library(blackbox STATIC blackbox.cpp ${src})
 target_include_directories(blackbox PUBLIC ./include ./src ${assimp_SOURCE_DIR} ./build/_deps/assimp-src/include ./build/_deps/assimp-build/include) #
 target_link_libraries(blackbox PUBLIC glfw assimp ${ASSIMP_LIBRARIES})
-message("ASDF ${assimp_SOURCE_DIR}")
+
 # BUILD DEMO EXECUTABLE #
 link_directories("./build")
 add_executable(app main.cpp)

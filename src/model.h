@@ -120,21 +120,29 @@ namespace ENG {
 		return meshes;
 	}
 
-	inline void SeriousModel (aiNode *node, const aiScene *scene) {
+	inline void SeriousModel (aiNode *node, const aiScene *scene, float scale = 0.1f) {
+
+		double factor;
+		scene->mMetaData->Get("UnitScaleFactor", factor);
+
+		auto rad2deg = [](glm::vec3 vec) {
+			glm::degrees(vec);
+			return vec;
+		};
 		
 		for(unsigned int i = 0; i < node->mNumMeshes; i++) {
-			// the node object only contains indices to index the actual objects in the scene. 
-			// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-			mainModel.meshes.push_back(processMesh(mesh, scene));
+
+			Entity* ent = CreateQuad(mesh->mName.C_Str());
+
+			ent->mesh = processMesh(mesh, scene);
 			aiVector3D pScaling, pRotation, pPosition;
 			node->mTransformation.Decompose(pScaling, pRotation, pPosition);
-			Transform t = Transform( vec3_cast(pPosition), vec3_cast(pRotation), vec3_cast(pScaling));
-			mainModel.transformations.push_back(t);
+			ent->transform = Transform( vec3_cast(pPosition), glm::degrees( vec3_cast(pRotation) ), vec3_cast(pScaling));
 		}
 		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 		for(unsigned int i = 0; i < node->mNumChildren; i++) {
-			processNode(node->mChildren[i], scene);
+			SeriousModel(node->mChildren[i], scene);
 		}
 	}
 }
