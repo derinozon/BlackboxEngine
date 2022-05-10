@@ -9,7 +9,7 @@
 
 #include "mesh.h"
 
-namespace ENG {
+namespace Blackbox {
 	
 	#ifndef __EMSCRIPTEN__
 	inline std::string resFolder = std::string(DG_GetExecutableDir()) + "res/";

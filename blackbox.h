@@ -38,7 +38,7 @@
 #include "src/primitive.h"
 #include "src/model.h"
 
-namespace ENG {
+namespace Blackbox {
 	
 	inline InputManager& Input = InputManager::Get();
 	inline Shader* defaultShader;

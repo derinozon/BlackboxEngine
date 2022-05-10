@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace ENG {
+namespace Blackbox {
 	struct Transform {
 		Transform* parent = nullptr;
 

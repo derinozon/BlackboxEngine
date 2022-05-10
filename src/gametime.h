@@ -1,6 +1,6 @@
 #pragma once
 
-namespace ENG {
+namespace Blackbox {
 
 
 	inline struct Time {

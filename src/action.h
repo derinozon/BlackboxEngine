@@ -2,7 +2,7 @@
 
 #include <vector>
 
-namespace ENG {
+namespace Blackbox {
 	class Action {
 		public:
 			Action () {}

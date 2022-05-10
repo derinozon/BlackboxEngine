@@ -5,7 +5,7 @@
 
 #include "texture.h"
 
-namespace ENG {
+namespace Blackbox {
 	struct Vertex {
 		glm::vec3 Position;
 		glm::vec3 Normal;

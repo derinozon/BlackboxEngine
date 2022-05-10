@@ -1,6 +1,6 @@
 #include "resources.h"
 
-namespace ENG {
+namespace Blackbox {
 	namespace Resources {
 		
 		std::string Load (const char* path) {

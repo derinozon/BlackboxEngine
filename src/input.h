@@ -39,7 +39,7 @@ namespace ENG::Input {
 }
 */
 
-namespace ENG {
+namespace Blackbox {
 	class InputManager {
 		public:
 		// Removes copy constructor

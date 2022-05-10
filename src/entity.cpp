@@ -1,6 +1,6 @@
 #include "entity.h"
 
-namespace ENG {
+namespace Blackbox {
 
 	Entity::Entity(std::string entityName) {
 		Log("Creating Entity");

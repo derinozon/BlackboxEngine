@@ -2,7 +2,7 @@
 #include "src/def.h"
 #include "blackbox.h"
 
-namespace ENG {
+namespace Blackbox {
 	
 	Window* init (const char* title, int width, int height, bool fullscreen, bool vsync) {
 		// Initialize GLFW

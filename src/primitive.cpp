@@ -1,6 +1,6 @@
 #include "primitive.h"
 
-namespace ENG {
+namespace Blackbox {
 
 	Entity* CreateQuad (const char* label) {
 		// Indices for vertices order

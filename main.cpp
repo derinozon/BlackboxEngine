@@ -1,6 +1,6 @@
 #include "src/editor.h"
 
-using namespace ENG;
+using namespace Blackbox;
 using namespace glm;
 
 Entity* crate () {
@@ -24,17 +24,27 @@ Entity* load3d (const char* modelPath, const char* texturePath) {
 	return object;
 }
 
-void load3ds (const char* modelPath, const char* texturePath) {
+void load3ds (const char* modelPath, const char* texturePath, float scale = 0.1f) {
 	Assimp::Importer importer;
 	std::string inputFile = resFolder + modelPath;
 	const aiScene *scene = importer.ReadFile(inputFile, aiProcess_Triangulate);
 	//const aiScene *scene = importer.ReadFile(inputFile, aiProcess_Triangulate | aiProcess_FlipUVs);
 
-	SeriousModel(scene->mRootNode ,scene);	
+	SeriousModel(scene->mRootNode ,scene, scale);	
+}
+
+void loadStatic (const char* modelPath, const char* texturePath, float scale = 0.1f) {
+	Assimp::Importer importer;
+	std::string inputFile = resFolder + modelPath;
+	const aiScene *scene = importer.ReadFile(inputFile, aiProcess_Triangulate);
+	//const aiScene *scene = importer.ReadFile(inputFile, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	StaticModel(scene->mRootNode ,scene, scale);	
 }
 
 void wip () {
-	load3ds("Test2.fbx", "crate.png");
+	// load3ds("Test2.fbx", "crate.png", 1);
+	// loadStatic("Test2.fbx", "crate.png");
 
 	Entity* obj = load3d("coral/coral.fbx", "coral/base.png");
 	obj->transform.rotation = vec3(-90,0,0);
@@ -42,10 +52,11 @@ void wip () {
 }
 
 int main() {
-	Window* window = ENG::init("Blackbox Engine");
+	Window* window = Blackbox::init("Blackbox Engine");
 	ImGuiIO& io = Editor::InitEditor(window);
 
-	Entity* obj = crate();
+	// Entity* obj = crate();
+	wip();
 
 	OnUpdate += []() {
 		float speed = 10 * Time.deltaTime * (Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
@@ -63,7 +74,7 @@ int main() {
 		//entityList[0]->transform.rotation.y += speed;
 	};
 	Editor::Render();
-	ENG::run(window);
+	Blackbox::run(window);
 	
 	return 0;
 }

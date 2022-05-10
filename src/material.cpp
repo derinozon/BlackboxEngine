@@ -1,6 +1,6 @@
 #include "material.h"
 
-namespace ENG {
+namespace Blackbox {
 	Material::Material () {
 		Log("Default Material");
 	}

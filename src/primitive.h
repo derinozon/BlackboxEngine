@@ -10,7 +10,7 @@
 #include "mesh.h"
 #include "entity.h"
 
-namespace ENG {
+namespace Blackbox {
 	/*
 	static GLfloat vertices[] =
 { //     COORDINATES     /        COLORS      /   TexCoord  //

@@ -22,7 +22,7 @@
 // #include "window.h"
 // #include "texture.h"
 
-namespace ENG::Editor {
+namespace Blackbox::Editor {
 	ImGuiIO& InitEditor(Window* window);
 	void DestroyEditor();
 	void Render();

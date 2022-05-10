@@ -1,6 +1,6 @@
 #include "editor.h"
 
-namespace ENG::Editor {
+namespace Blackbox::Editor {
 	bool wireframe;
 	bool vsync = true;
 	int selectedObj = -1;

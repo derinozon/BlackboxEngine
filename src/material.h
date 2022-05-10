@@ -6,7 +6,7 @@
 #include "debug.h"
 #include "resources.h"
 
-namespace ENG {
+namespace Blackbox {
 	class Material {
 	public:
 		Material();

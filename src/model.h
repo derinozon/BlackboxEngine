@@ -16,7 +16,7 @@ static inline glm::quat quat_cast(const aiQuaternion &q) { return glm::quat(q.w,
 static inline glm::mat4 mat4_cast(const aiMatrix4x4 &m) { return glm::transpose(glm::make_mat4(&m.a1)); }
 static inline glm::mat4 mat4_cast(const aiMatrix3x3 &m) { return glm::transpose(glm::make_mat3(&m.a1)); }
 
-namespace ENG {
+namespace Blackbox {
 
 	inline Mesh processMesh(aiMesh *mesh, const aiScene *scene) {
 			// data to fill
@@ -138,11 +138,52 @@ namespace ENG {
 			ent->mesh = processMesh(mesh, scene);
 			aiVector3D pScaling, pRotation, pPosition;
 			node->mTransformation.Decompose(pScaling, pRotation, pPosition);
-			ent->transform = Transform( vec3_cast(pPosition), glm::degrees( vec3_cast(pRotation) ), vec3_cast(pScaling));
+			
+			ent->transform = Transform( vec3_cast(pPosition), glm::degrees( vec3_cast(pRotation) ), vec3_cast(pScaling)*scale);
 		}
 		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 		for(unsigned int i = 0; i < node->mNumChildren; i++) {
-			SeriousModel(node->mChildren[i], scene);
+			SeriousModel(node->mChildren[i], scene, scale);
+		}
+	}
+
+	inline Entity* parent = nullptr;
+	inline void StaticModel (aiNode *node, const aiScene *scene, float scale = 0.1f) {
+		double factor;
+		scene->mMetaData->Get("UnitScaleFactor", factor);
+
+		auto rad2deg = [](glm::vec3 vec) {
+			glm::degrees(vec);
+			return vec;
+		};
+
+		auto CombineMesh = [](Mesh a, Mesh b) {
+			Mesh combine = a;
+			combine.vertices.insert( combine.vertices.end(), b.vertices.begin(), b.vertices.end() );
+			combine.indices.insert( combine.indices.end(), b.indices.begin(), b.indices.end() );
+			return combine;
+		};
+		
+		for(unsigned int i = 0; i < node->mNumMeshes; i++) {
+			aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+
+			if (parent == nullptr) {
+				parent = CreateQuad(mesh->mName.C_Str());
+				parent->mesh = processMesh(mesh, scene);
+				Log("PARENT");
+			}
+			else {
+				parent->mesh = CombineMesh(parent->mesh, processMesh(mesh, scene));
+			}
+
+			aiVector3D pScaling, pRotation, pPosition;
+			node->mTransformation.Decompose(pScaling, pRotation, pPosition);
+			
+			parent->transform = Transform( vec3_cast(pPosition), glm::degrees( vec3_cast(pRotation) ), vec3_cast(pScaling));
+		}
+		// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
+		for(unsigned int i = 0; i < node->mNumChildren; i++) {
+			StaticModel(node->mChildren[i], scene, scale);
 		}
 	}
 }

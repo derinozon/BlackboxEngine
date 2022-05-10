@@ -1,7 +1,7 @@
 #include "mesh.h"
 #include "debug.h"
 
-namespace ENG {
+namespace Blackbox {
 
 	void Mesh::Draw(Shader &shader) {
 		// BIND TEXTURE //

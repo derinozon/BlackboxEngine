@@ -8,7 +8,7 @@
 #include "material.h"
 #include "debug.h"
 
-namespace ENG {
+namespace Blackbox {
 
 	class Entity {
 		public:
