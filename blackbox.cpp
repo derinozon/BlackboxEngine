@@ -1,5 +1,4 @@
 // Usefull definitions //
-#include "src/def.h"
 #include "blackbox.h"
 
 namespace Blackbox {

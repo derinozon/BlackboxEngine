@@ -14,7 +14,7 @@ namespace Blackbox {
 	#ifndef __EMSCRIPTEN__
 	inline std::string resFolder = std::string(DG_GetExecutableDir()) + "res/";
 	#else
-	inline std::string resFolder = std::string("res/");
+	inline std::string resFolder = std::string("./res/");
 	#endif
 
 	namespace Resources {

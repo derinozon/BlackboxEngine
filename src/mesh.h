@@ -16,12 +16,12 @@ namespace Blackbox {
 		public:
 			// mesh data
 			std::vector<Vertex> vertices;
-			std::vector<unsigned int> indices;
+			std::vector<uint32_t> indices;
 			std::string resourceHandle;
 			//std::vector<Texture>      textures;
 
 			Mesh();
-			Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+			Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
 			~Mesh();
 
 			void Draw(Shader &shader);
@@ -30,6 +30,6 @@ namespace Blackbox {
 
 		private:
 			//  render data
-			unsigned int VAO, VBO, EBO;
+			uint32_t VAO, VBO, EBO;
 	};
 }

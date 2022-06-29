@@ -24,11 +24,13 @@ namespace Blackbox::Editor {
 			ImGui::Text("%s", fps.c_str());
 			
 			if (ToggleField("Vsync", &vsync) ) {
-				glfwSwapInterval(vsync ? 60 : 0);
+				glfwSwapInterval(vsync);
 			}
+			#ifndef __EMSCRIPTEN__
 			if (ToggleField("Wireframe", &wireframe) ) {
 				glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 			}
+			#endif
 			ImGui::End();
 		};
 

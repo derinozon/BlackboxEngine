@@ -17,7 +17,7 @@
 #include <iostream>
 #include <cerrno>
 
-#include "def.h"
+#include "internal/res_shader.h"
 
 std::string get_file_contents(const char* filename);
 
