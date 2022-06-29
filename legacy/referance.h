@@ -99,3 +99,36 @@ void LoadObj () {
 	teapot->mesh = Blackbox::Mesh(vertices, indices);
 	//teapot->material = Material("crate.png");
 }
+
+
+
+
+
+
+
+
+
+#ifdef DONTBOTHERNOTWORKING
+auto window_size_callback = [](GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+	camera.width = width;
+	camera.height = height;
+	printf("window_size_callback %i, %i\n", width, height);
+};
+glfwSetWindowSizeCallback(window->Get(), window_size_callback);
+#endif
+#ifdef __EMSCRIPTEN__
+EM_JS(int, canvas_get_width, (), {
+	return document.getElementsByTagName('canvas')[0].getBoundingClientRect().width;
+});
+EM_JS(int, canvas_get_height, (), {
+	return document.getElementsByTagName('canvas')[0].getBoundingClientRect().height;
+});
+#endif
+#ifdef __EMSCRIPTEN__
+int ww = canvas_get_width();
+int hh = canvas_get_height();
+glViewport(0, 0, ww, hh);
+camera.width = ww;
+camera.height = hh;
+#endif
