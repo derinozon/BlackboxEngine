@@ -29,45 +29,29 @@ if(NOT glfw_POPULATED)
     add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 endif()
 
-FetchContent_Declare(
-	assimp
-	GIT_REPOSITORY https://github.com/assimp/assimp.git
-)
-
-set(BUILD_SHARED_LIBS FALSE)
-set(ASSIMP_NO_EXPORT TRUE)
-set(ASSIMP_BUILD_ASSIMP_TOOLS FALSE)
-set(ASSIMP_BUILD_TESTS FALSE)
-set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT FALSE)
-set(ASSIMP_BUILD_GLTF_IMPORTER TRUE)
-set(ASSIMP_BUILD_FBX_IMPORTER TRUE)
-set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
-
-FetchContent_GetProperties(assimp)
-if(NOT assimp_POPULATED)
-	FetchContent_Populate(assimp)
-
-	add_subdirectory(${assimp_SOURCE_DIR} ${assimp_BINARY_DIR})
-endif()
-
-include_directories(${ASSIMP_INCLUDE_DIR})
-
 # GET SOURCE #
 file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/ImGUI/*.cpp")
 
 # BUILD ENGINE AS STATIC LIBRARY #
 add_library(blackbox STATIC blackbox.cpp ${src})
-target_include_directories(blackbox PUBLIC ./include ./src ${assimp_SOURCE_DIR} ./build/_deps/assimp-src/include ./build/_deps/assimp-build/include) #
-target_link_libraries(blackbox PUBLIC glfw assimp ${ASSIMP_LIBRARIES})
+target_include_directories(blackbox PUBLIC ./include ./src) #
+target_link_libraries(blackbox PUBLIC glfw)
 
 # BUILD DEMO EXECUTABLE #
 link_directories("./build")
 add_executable(app main.cpp)
 target_link_libraries(app PUBLIC blackbox)
 
-#if (WIN32)
-#target_link_options(app PRIVATE -mwindows)
-#endif (WIN32)
+target_compile_definitions(app PUBLIC LITE)
+
+if (WIN32)
+target_link_options(app PRIVATE -mwindows)
+
+	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	target_link_options(app PRIVATE -mconsole)
+	endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+
+endif (WIN32)
 
 if (UNIX)
 message("${BoldCyan}Copying resources folder${ColorReset}")

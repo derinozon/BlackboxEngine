@@ -4,7 +4,7 @@ namespace Blackbox::Editor {
 	bool wireframe;
 	bool vsync = true;
 	int selectedObj = -1;
-	
+
 	ImGuiIO& InitEditor (Window* window) {
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -24,11 +24,13 @@ namespace Blackbox::Editor {
 			ImGui::Text("%s", fps.c_str());
 			
 			if (ToggleField("Vsync", &vsync) ) {
-				glfwSwapInterval(vsync ? 60 : 0);
+				glfwSwapInterval(vsync);
 			}
+			#ifndef __EMSCRIPTEN__
 			if (ToggleField("Wireframe", &wireframe) ) {
 				glPolygonMode(GL_FRONT_AND_BACK, wireframe ? GL_LINE : GL_FILL);
 			}
+			#endif
 			ImGui::End();
 		};
 
@@ -67,10 +69,28 @@ namespace Blackbox::Editor {
 		};
 
 		OnUpdate += []() {
-			bool cmd = Input.GetKey(GLFW_KEY_LEFT_SUPER) || Input.GetKey(GLFW_KEY_RIGHT_SUPER);
-			if (cmd && Input.GetKey(GLFW_KEY_BACKSPACE) && selectedObj>-1) {
+			// Deleting objects on backspace or delete key //
+			#ifdef __APPLE__
+			bool cmd = (Input.GetKey(GLFW_KEY_LEFT_SUPER)||Input.GetKey(GLFW_KEY_RIGHT_SUPER))&&Input.GetKey(GLFW_KEY_BACKSPACE);
+			#else
+			bool cmd = Input.GetKey(GLFW_KEY_DELETE);
+			#endif
+			if (cmd && selectedObj>-1) {
 				delete entityList[selectedObj];
 				selectedObj = -1;
+			}
+
+			// Editor Camera movement //
+			float speed = 10 * Time.deltaTime * (Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
+		
+			camera.Position += speed * glm::vec3(1,0,0) * Input.GetAxisHorizontal();
+			camera.Position += speed * glm::vec3(0,0,-1) * Input.GetAxisVertical();
+			
+			if (Input.GetKey(GLFW_KEY_E)) {
+				camera.Position += speed * glm::vec3(0,1,0);
+			}
+			if (Input.GetKey(GLFW_KEY_Q)) {
+				camera.Position += speed * glm::vec3(0,-1,0);
 			}
 		};
 

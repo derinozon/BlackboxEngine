@@ -1,5 +1,3 @@
-// Usefull definitions //
-#include "src/def.h"
 #include "blackbox.h"
 
 namespace Blackbox {
@@ -13,11 +11,10 @@ namespace Blackbox {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 		std::cout << "Init success" << std::endl;
 		
-		#ifdef __EMSCRIPTEN__
-		// emscripten_get_canvas_size()
-		#endif
+		
 		Window* window = new Window(title, width, height, fullscreen);
 		
 		if (window->Get() == NULL) {
@@ -66,7 +63,7 @@ namespace Blackbox {
 		return window;
 	}
 
-	
+
 	int run (Window* window) {
 		// Enables the Depth Buffer
 		glEnable(GL_DEPTH_TEST);

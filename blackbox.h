@@ -2,18 +2,17 @@
 
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
-	// #define GL_GLEXT_PROTOTYPES
-	// #define EGL_EGLEXT_PROTOTYPES
+	#define GL_GLEXT_PROTOTYPES
+	#define EGL_EGLEXT_PROTOTYPES
 	
-	#include <GL/gl.h>
-	#include <GLES3/gl3.h>
+	// #include <GL/gl.h>
+	// #include <GLES3/gl3.h>
 #else
 	#include <glad/glad.h>
+	#include "include/DG/DG_misc.h"
 #endif
 
 #include <GLFW/glfw3.h>
-
-#include "include/DG/DG_misc.h"
 
 #include "src/window.h"
 

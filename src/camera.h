@@ -15,7 +15,6 @@
 #include <glm/gtx/vector_angle.hpp>
 
 #include "shader.h"
-//#include "gametime.h"
 
 class Camera {
 public:

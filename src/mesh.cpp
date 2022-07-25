@@ -24,7 +24,7 @@ namespace Blackbox {
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);  
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), 
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), 
 					&indices[0], GL_STATIC_DRAW);
 
 		// vertex positions
@@ -44,7 +44,7 @@ namespace Blackbox {
 		Log("Default Mesh");
 	}
 
-	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices) {
+	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices) {
 		this->vertices = vertices;
 		this->indices = indices;
 
