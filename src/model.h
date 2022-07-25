@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../include/tiny_obj_loader.h"
+#include "../include/tiny_gltf_loader.h"
 #include "internal/res_teapot.h"
 
 #include <glm/gtx/hash.hpp>
@@ -10,7 +11,22 @@
 #include "resources.h"
 
 namespace Blackbox {
-	// Give nullptr to render default model
+
+	// WIP //
+	inline void LoadGLTF () {
+		tinygltf::Scene scene; 
+		tinygltf::TinyGLTFLoader loader;
+		std::string err;
+		
+		bool ret = loader.LoadASCIIFromFile(&scene, &err, "res/BoxTextured.gltf");
+		auto m = scene.meshes.at(0).name.c_str();
+		
+		
+		Entity* ent = CreateQuad(m);
+		// ent->mesh = Mesh(scene.meshes.at(0));
+	}
+
+	// Give nullptr to render default model //
 	inline Mesh LoadObj (const char* filePath) {
 
 		tinyobj::attrib_t attrib;

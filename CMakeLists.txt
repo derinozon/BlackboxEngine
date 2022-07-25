@@ -46,6 +46,11 @@ target_compile_definitions(app PUBLIC LITE)
 
 if (WIN32)
 target_link_options(app PRIVATE -mwindows)
+
+	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	target_link_options(app PRIVATE -mconsole)
+	endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
+
 endif (WIN32)
 
 if (UNIX)
