@@ -19,7 +19,5 @@ namespace Blackbox {
 		Entity();
 		Entity(std::string entityName);
 		~Entity();
-
-		// NLOHMANN_DEFINE_TYPE_INTRUSIVE(Entity, name, transform, mesh)
 	};
 }

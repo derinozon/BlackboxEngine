@@ -37,7 +37,7 @@ namespace Blackbox {
 		std::string err;
 
 		if (filePath) {
-			std::string inputfile = resFolder + "teapot.obj";
+			std::string inputfile = resFolder + filePath;
 			tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str());
 		}
 		else {
