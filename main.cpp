@@ -9,14 +9,21 @@ void loadOBJFile () {
 	teapot->material = Blackbox::Material("Shiba_DIF01.png");
 }
 
+void DVD () {
+	auto dvd = CreateQuad("DVD");
+	dvd->material = Material("DVD.png");
+}
+
 int main() {
 	Window* window = Blackbox::init("Blackbox Engine");
 	ImGuiIO& io = Editor::InitEditor(window);
 
-	loadOBJFile();
+	// loadOBJFile();
+	DVD();
+	camera.perspective = false;
 
 	OnUpdate += []() {
-		entityList[0]->transform.rotation.y += 10 * Time.deltaTime;
+		// entityList[0]->transform.rotation.y += 10 * Time.deltaTime;
 	};
 	Editor::Render();
 	Blackbox::run(window);

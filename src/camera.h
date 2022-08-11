@@ -25,8 +25,9 @@ public:
 
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 projection = glm::mat4(1.0f);
+	glm::vec4 bounds;
 	
-	bool perspective = false;
+	bool perspective = true;
 	float orthoSize = 10.0f;
 
 	// Stores the width and height of the window

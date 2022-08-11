@@ -2,7 +2,7 @@
 
 namespace Blackbox {
 	
-	Window* init (const char* title, int width, int height, bool fullscreen, bool vsync) {
+	Window* init (const char* title, int width, int height, bool fullscreen, bool vsync, bool resizable) {
 		// Initialize GLFW
 		glfwSetErrorCallback([](int error, const char *msg){
 			std::cerr << '[' << error << ']' << msg << std::endl;
@@ -11,7 +11,13 @@ namespace Blackbox {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+		glfwWindowHint(GLFW_RESIZABLE, resizable);
+
+		// glfwWindowHint(GLFW_DECORATED , 0);
+		// glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER , 1);
+
+		glfwWindowHint(GLFW_SAMPLES  , 8);
+		glfwWindowHint(GLFW_SRGB_CAPABLE, 1);
 		std::cout << "Init success" << std::endl;
 		
 		
@@ -82,7 +88,7 @@ namespace Blackbox {
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			
-			glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+			glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
 			// Clean the back buffer and depth buffer //
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

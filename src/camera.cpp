@@ -10,33 +10,27 @@ Camera::Camera(int width, int height, glm::vec3 position) {
 void Camera::UpdateMatrix() {
 	// Initializes matrices since otherwise they will be the null matrix
 	
-
+	float deviceRatio = width / height;
 	// Makes camera look in the right direction from the right position
 	view = glm::lookAt(Position, Position + Orientation, Up);
 	// Adds perspective to the scene
 	if (perspective) {
-		projection = glm::perspective(glm::radians(FOV), (float)width / height, nearPlane, farPlane);
+		projection = glm::perspective(glm::radians(FOV), deviceRatio, nearPlane, farPlane);
 	}
 	else {
-		float correction;
-		float deviceRatio = width / height;
-		float virtualRatio = 1;
 		float xCorrection = width / 1;
 		float yCorrection = height / 1;
 
-		if (virtualRatio < deviceRatio) {
-		correction = yCorrection;
-		} else {
-		correction = xCorrection;
-		}
+		float correction = 1<deviceRatio ? yCorrection : xCorrection;
 		
-		float left = (-width / 2.0f / correction) * orthoSize;
-		float right = (width / 2.0f / correction) * orthoSize;
-		float bottom = (-height / 2.0f / correction) * orthoSize;
-		float top = (height / 2.0f / correction) * orthoSize;
+		bounds = glm::vec4(
+			(-width / 2.0f / correction),  // left
+			(width / 2.0f / correction),   // right
+			(-height / 2.0f / correction), // bottom
+			(height / 2.0f / correction)   // top
+		) * orthoSize;
 
-		// Now set matrix which includes correction.
-		projection = glm::ortho(left, right, bottom, top);
+		projection = glm::ortho(bounds.x, bounds.y, bounds.z, bounds.w, nearPlane, farPlane);
 	}
 }
 

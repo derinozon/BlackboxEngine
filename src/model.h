@@ -46,13 +46,8 @@ namespace Blackbox {
 		}
 		
 
-		if (!warn.empty()) {
-		std::cout << warn << std::endl;
-		}
-
-		if (!err.empty()) {
-		std::cerr << err << std::endl;
-		}
+		if (!warn.empty()) Log(warn);
+		if (!err.empty()) Log(err);
 
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;

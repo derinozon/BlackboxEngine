@@ -42,9 +42,10 @@ namespace Blackbox {
 	inline InputManager& Input = InputManager::Get();
 	inline Shader* defaultShader;
 	inline Camera camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
+	inline glm::vec4 clearColor(0.07f, 0.13f, 0.17f, 1.0f);
 
 	int run(Window* window);
-	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false, bool vsync = true);
+	Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false, bool vsync = true, bool resizable = true);
 	inline Window* currentWindow;
 	inline Action OnUpdate = Action();
 	inline Action OnDrawGUI = Action();
