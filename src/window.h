@@ -11,6 +11,18 @@ public:
 		return window;
 	}
 
+	void MakeFullscreen () {
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+ 		glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	}
+
+	void MakeWindowed () {
+		GLFWmonitor* monitor = glfwGetWindowMonitor(window);
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+ 		glfwSetWindowMonitor(window, NULL, 0, 0, mode->width, mode->height, mode->refreshRate);
+	}
+
 	Window (const char* title, int width, int height, bool fullscreen) {
 		unsigned int wWidth = width;
 		unsigned int wHeight = height;

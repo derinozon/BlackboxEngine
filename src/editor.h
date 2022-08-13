@@ -23,6 +23,8 @@
 // #include "texture.h"
 
 namespace Blackbox::Editor {
+	inline bool renderEditor = true;
+
 	ImGuiIO& InitEditor(Window* window);
 	void DestroyEditor();
 	void Render();

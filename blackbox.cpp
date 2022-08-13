@@ -14,7 +14,7 @@ namespace Blackbox {
 		glfwWindowHint(GLFW_RESIZABLE, resizable);
 
 		// glfwWindowHint(GLFW_DECORATED , 0);
-		// glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER , 1);
+		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER , 1);
 
 		glfwWindowHint(GLFW_SAMPLES  , 8);
 		glfwWindowHint(GLFW_SRGB_CAPABLE, 1);

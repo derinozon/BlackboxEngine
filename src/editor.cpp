@@ -18,6 +18,69 @@ namespace Blackbox::Editor {
 		ImGui_ImplOpenGL3_Init("#version 330");
 		#endif
 
+		
+
+
+		OnUpdate += []() {
+			// Deleting objects on backspace or delete key //
+			#ifdef __APPLE__
+			bool cmd = (Input.GetKey(GLFW_KEY_LEFT_SUPER)||Input.GetKey(GLFW_KEY_RIGHT_SUPER))&&Input.GetKey(GLFW_KEY_BACKSPACE);
+			#else
+			bool cmd = Input.GetKey(GLFW_KEY_DELETE);
+			#endif
+			if (cmd && selectedObj>-1) {
+				delete entityList[selectedObj];
+				selectedObj = -1;
+			}
+
+			// Editor Camera movement //
+			float speed = 10 * Time.deltaTime * (Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
+		
+			camera.Position += speed * glm::vec3(1,0,0) * Input.GetAxisHorizontal();
+			camera.Position += speed * glm::vec3(0,0,-1) * Input.GetAxisVertical();
+			
+			if (Input.GetKey(GLFW_KEY_E)) {
+				camera.Position += speed * glm::vec3(0,1,0);
+			}
+			if (Input.GetKey(GLFW_KEY_Q)) {
+				camera.Position += speed * glm::vec3(0,-1,0);
+			}
+		};
+
+		OnQuit += []() {
+			Log("Destroying Editor");
+			Editor::DestroyEditor();
+		};
+
+		OnDrawGUI += []() {
+			NewFrame();
+
+			if (renderEditor) {
+				Render();
+			}
+		
+			ImGui::Render();
+			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		};
+
+		Log("Editor Initialized");
+
+		// io.Fonts->AddFontFromFileTTF("./res/Roboto-Light.ttf", 12);
+		ImGuiStyle& style = ImGui::GetStyle();
+		
+		// io.DisplaySize = ImVec2(1600*2, 900*2);
+		// style.ScaleAllSizes(0.1);
+
+		return io;
+	}
+
+	void DestroyEditor () {
+		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
+	}
+
+	void Render () {
 		auto Debug = []() {
 			ImGui::Begin("Debug");
 			std::string fps = "FPS : " + std::to_string( (int)(1.0/Time.deltaTime) );
@@ -68,67 +131,9 @@ namespace Blackbox::Editor {
 			ImGui::End();
 		};
 
-		OnUpdate += []() {
-			// Deleting objects on backspace or delete key //
-			#ifdef __APPLE__
-			bool cmd = (Input.GetKey(GLFW_KEY_LEFT_SUPER)||Input.GetKey(GLFW_KEY_RIGHT_SUPER))&&Input.GetKey(GLFW_KEY_BACKSPACE);
-			#else
-			bool cmd = Input.GetKey(GLFW_KEY_DELETE);
-			#endif
-			if (cmd && selectedObj>-1) {
-				delete entityList[selectedObj];
-				selectedObj = -1;
-			}
-
-			// Editor Camera movement //
-			float speed = 10 * Time.deltaTime * (Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
-		
-			camera.Position += speed * glm::vec3(1,0,0) * Input.GetAxisHorizontal();
-			camera.Position += speed * glm::vec3(0,0,-1) * Input.GetAxisVertical();
-			
-			if (Input.GetKey(GLFW_KEY_E)) {
-				camera.Position += speed * glm::vec3(0,1,0);
-			}
-			if (Input.GetKey(GLFW_KEY_Q)) {
-				camera.Position += speed * glm::vec3(0,-1,0);
-			}
-		};
-
-		OnDrawGUI += []() {
-			NewFrame();
-		};
-
-		OnDrawGUI += Debug;
-		OnDrawGUI += Hierarchy;
-		OnDrawGUI += Inspector;
-
-		Log("Editor Initialized");
-
-		// io.Fonts->AddFontFromFileTTF("./res/Roboto-Light.ttf", 12);
-		ImGuiStyle& style = ImGui::GetStyle();
-		
-		// io.DisplaySize = ImVec2(1600*2, 900*2);
-		// style.ScaleAllSizes(0.1);
-
-		return io;
-	}
-
-	void DestroyEditor () {
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
-	}
-
-	// Call this once
-	void Render () {
-		OnDrawGUI += []() {
-			ImGui::Render();
-			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		};
-		OnQuit += []() {
-			Log("Destroying Editor");
-			Editor::DestroyEditor();
-		};
+		Debug();
+		Hierarchy();
+		Inspector();
 	}
 
 	void NewFrame () {
