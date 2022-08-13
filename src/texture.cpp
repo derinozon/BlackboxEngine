@@ -4,7 +4,7 @@
 #include <stb/stb_image.h>
 
 // Loads texture from path
-Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum pixelType) {
+Texture::Texture(const char* image, GLenum texType) {
 	type = texType;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data = stbi_load(image, &width, &height, &colorChannels, 0);
@@ -29,11 +29,11 @@ Texture::Texture(unsigned char bytes[], int widthImg, int heightImg, int numColC
 }
 
 // Loads texture from memory
-Texture::Texture(unsigned char bytes[], int len, GLenum texType) {
+Texture::Texture(unsigned char bytes[], int len, int desiredChannels, GLenum texType) {
 	type = texType;
 	stbi_set_flip_vertically_on_load(true);
 
-	stbi_uc* data = stbi_load_from_memory(bytes, len, &width, &height, &colorChannels, 4);
+	stbi_uc* data = stbi_load_from_memory(bytes, len, &width, &height, &colorChannels, desiredChannels);
 	if (!data) {
 		Log("Problem loading texture");
 	}

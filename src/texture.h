@@ -15,10 +15,10 @@ public:
 	GLenum type;
 	int width, height, colorChannels;
 	
-	// Texture(const char* image);
-	Texture(unsigned char bytes[], int len, GLenum texType = GL_TEXTURE_2D);
+	// Loads texture from memory
+	Texture(unsigned char bytes[], int len, int desiredChannels = 4, GLenum texType = GL_TEXTURE_2D);
 	Texture(unsigned char bytes[], int widthImg, int heightImg, int numColCh, GLenum texType);
-	Texture(const char* image, GLenum texType = GL_TEXTURE_2D, GLenum slot = GL_TEXTURE0, GLenum pixelType = GL_UNSIGNED_BYTE);
+	Texture(const char* image, GLenum texType = GL_TEXTURE_2D);
 	~Texture();
 
 	void texUnit(Shader& shader, const char* uniform, GLuint unit);
