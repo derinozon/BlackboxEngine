@@ -18,11 +18,8 @@ namespace Blackbox {
 		};
 
 		Entity* ent = new Entity(label);
-
-		//ent->transform = {vec3(0, 0, -10), vec3(0,0,45), vec3(3,3,3)};
 		ent->mesh = Mesh(pvertices, pindices);
 		ent->mesh.resourceHandle = "QUAD";
-		// ent->material = Material(defaultShader, brickTex2);
 		return ent;
 	}
 	Entity* CreateQuad () {

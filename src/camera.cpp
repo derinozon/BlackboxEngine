@@ -10,7 +10,7 @@ Camera::Camera(int width, int height, glm::vec3 position) {
 void Camera::UpdateMatrix() {
 	// Initializes matrices since otherwise they will be the null matrix
 	
-	float deviceRatio = width / height;
+	float deviceRatio = (float)width / height;
 	// Makes camera look in the right direction from the right position
 	view = glm::lookAt(Position, Position + Orientation, Up);
 	// Adds perspective to the scene

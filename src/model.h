@@ -2,6 +2,7 @@
 
 #include "../include/tiny_obj_loader.h"
 #include "../include/tiny_gltf_loader.h"
+
 #include "internal/res_teapot.h"
 
 #include <glm/gtx/hash.hpp>
