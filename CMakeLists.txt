@@ -44,13 +44,16 @@ target_link_libraries(app PUBLIC blackbox)
 
 target_compile_definitions(app PUBLIC LITE)
 
+if (MINGW)
+	target_link_options(app PRIVATE -static-libgcc -static-libstdc++)
+endif (MINGW)
+
 if (WIN32)
-target_link_options(app PRIVATE -mwindows)
+	target_link_options(app PRIVATE -mwindows)
 
 	if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-	target_link_options(app PRIVATE -mconsole)
+		target_link_options(app PRIVATE -mconsole)
 	endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
-
 endif (WIN32)
 
 if (UNIX)
