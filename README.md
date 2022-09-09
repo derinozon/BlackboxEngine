@@ -1,3 +1,3 @@
 # Blackbox
-This is an OpenGL based 3D rendering engine designed to display 3D content on the web. It's in really early stage and shouldn't be used.
+This is an OpenGL based 3D rendering engine designed to display 3D content on the web. It's in really early stage and shouldn't be used commercially.<br><br>
 ![Alt text](res/showcase0.png)
