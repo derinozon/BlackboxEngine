@@ -14,7 +14,7 @@ SRC_FILES := $(wildcard src/*.cpp lib/*.cpp lib/ImGUI/*.cpp)
 IN = main.cpp blackbox.cpp
 
 web: main.cpp $(SRC_FILES)
-	$(WC) $(CCV) $(IN) $(SRC_FILES) $(WINCLUDE) $(WBIND) $(WSHELL) $(WEMBED) -o build/index.html
+	$(WC) $(CCV) $(IN) $(SRC_FILES) $(WINCLUDE) $(WBIND) $(WSHELL) -o build/index.html
 #-s ASSERTIONS=1 -s SAFE_HEAP=1 -s LLD_REPORT_UNDEFINED -s USE_FREETYPE=1
 
 # Make this work in the future!

@@ -1,7 +1,23 @@
 #include "blackbox.h"
 
 namespace Blackbox {
-	
+
+	#ifdef __EMSCRIPTEN__
+	EMSCRIPTEN_KEEPALIVE int framebuffer_size_callback(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
+		// int width = uiEvent->windowInnerWidth;
+		// int height = uiEvent->windowInnerHeight;
+		// emscripten_get_canvas_element_size("canvas", &width, &height);
+		double cw, ch;
+		emscripten_get_element_css_size("canvas", &cw, &ch);
+		int width = (int) cw;
+		int height = (int) ch;
+
+		glViewport(0, 0, width, height);
+		camera.width = width;
+		camera.height = height;
+		return 0;
+	}
+	#endif
 	Window* init (const char* title, int width, int height, bool fullscreen, bool vsync, bool resizable) {
 		// Initialize GLFW
 		glfwSetErrorCallback([](int error, const char *msg){
@@ -39,14 +55,19 @@ namespace Blackbox {
 			gladLoadGL();
 		#endif
 
-		auto framebuffer_size_callback = [](GLFWwindow* window, int width, int height) {
-			glViewport(0, 0, width, height);
-			camera.width = width;
-			camera.height = height;
-		};
+		#ifdef __EMSCRIPTEN__
+			// Work in progress not 
+			emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, &framebuffer_size_callback);
+		#else
+			auto framebuffer_size_callback = [](GLFWwindow* window, int width, int height) {
+				glViewport(0, 0, width, height);
+				camera.width = width;
+				camera.height = height;
+			};
 
-		glfwSetFramebufferSizeCallback(window->Get(), framebuffer_size_callback);
-		framebuffer_size_callback(window->Get(), width, height);
+			glfwSetFramebufferSizeCallback(window->Get(), framebuffer_size_callback);
+			framebuffer_size_callback(window->Get(), width, height);
+		#endif
 
 		std::cout << "Viewport success" << std::endl;
 
