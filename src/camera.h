@@ -29,7 +29,6 @@ public:
 	
 	bool perspective = true;
 	float orthoSize = 10.0f;
-
 	// Stores the width and height of the window
 	int width;
 	int height;

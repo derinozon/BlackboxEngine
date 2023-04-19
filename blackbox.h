@@ -37,6 +37,7 @@
 #include "src/entity.h"
 #include "src/primitive.h"
 #include "src/model.h"
+#include "src/random.h"
 
 namespace Blackbox {
 	

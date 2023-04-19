@@ -23,6 +23,7 @@ namespace Blackbox {
 		glfwSetErrorCallback([](int error, const char *msg){
 			std::cerr << '[' << error << ']' << msg << std::endl;
 		});
+		
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
