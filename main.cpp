@@ -5,7 +5,6 @@
 int main() {
 	Window* window = Blackbox::init("Blackbox Engine");
 	// ImGuiIO& io = Editor::InitEditor(window);
-	
 	Particle();
 	return Blackbox::run(window);
 }

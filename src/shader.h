@@ -23,21 +23,19 @@ std::string get_file_contents(const char* filename);
 
 class Shader {
 	public:
-		// Reference ID of the Shader Program
 		GLuint ID;
 		
 		Shader();
+		Shader(const char* shaderSource, GLuint shaderType);
 		Shader(const char* vertexFile, const char* fragmentFile);
 
 		void UploadUniform3f (const char* uniform, glm::vec3 vector);
 		void UploadUniform4f (const char* uniform, glm::vec4 vector);
 		void UploadUniform1i (const char* uniform, int i);
 		void UploadUniformMatrix4fv (const char* uniform, glm::mat4 matrix);
-		// Activates the Shader Program
 		void Activate();
-		// Deletes the Shader Program
 		void Delete();
 	private:
-		// Checks if the different Shaders have compiled properly
-		void compileErrors(unsigned int shader, const char* type);
+		void CompileErrors (unsigned int shader, const char* type);
+		GLuint CreateShader (const char* shaderSource, GLuint shaderType);
 };

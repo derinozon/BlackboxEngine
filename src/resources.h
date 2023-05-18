@@ -19,6 +19,7 @@ namespace Blackbox {
 
 	namespace Resources {
 		
+		std::string ReadFile(std::string filePath);
 		std::string Load (const char* path);
 		Texture* LoadTexture (const char* path);
 

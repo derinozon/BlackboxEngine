@@ -8,7 +8,7 @@ std::vector<float> mass;
 std::vector<glm::vec3> velocity;
 
 void Particle () {
-	const int particleSize = 50;
+	const int particleSize = 500;
 	std::srand(Time.time);
 	
 	auto spawnParticle = []() {
@@ -72,4 +72,4 @@ void Particle () {
             particle->transform.position += velocity[i] * dt + 0.5f * acceleration * dt * dt;
         }
     };
-}
+} 

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 set (CMAKE_CXX_STANDARD 17)
-# set (CMAKE_BUILD_TYPE Debug)
-set (CMAKE_BUILD_TYPE Release)
+set (CMAKE_BUILD_TYPE Debug)
+# set (CMAKE_BUILD_TYPE Release)
 project(blackbox)
 
 include(FetchContent)
@@ -30,7 +30,7 @@ if(NOT glfw_POPULATED)
 endif()
 
 # GET SOURCE #
-file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/ImGUI/*.cpp")
+file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/*.c" "lib/ImGUI/*.cpp")
 
 # BUILD ENGINE AS STATIC LIBRARY #
 add_library(blackbox STATIC blackbox.cpp ${src})

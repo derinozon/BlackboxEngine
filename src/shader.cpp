@@ -14,54 +14,64 @@ std::string get_file_contents(const char* filename) {
 	throw(errno);
 }
 
+GLuint Shader::CreateShader (const char *shaderSource, GLuint shaderType) {
+	GLuint shader = glCreateShader(shaderType);
+	glShaderSource(shader, 1, &shaderSource, NULL);
+	glCompileShader(shader);
+
+	std::string errType;
+	switch (shaderType) {
+	case GL_VERTEX_SHADER:
+		errType = "VERTEX";
+		break;
+	case GL_FRAGMENT_SHADER:
+		errType = "FRAGMENT";
+		break;
+	case GL_COMPUTE_SHADER:
+		errType = "COMPUTE";
+		break;
+	default:
+		errType = "UNDEFINED";
+		break;
+	}
+	CompileErrors(shader, errType.c_str());
+	return shader;
+}
+
 Shader::Shader(){};
-Shader::Shader(const char* vertexSource, const char* fragmentSource) {
 
-	// const char* vertexSource = get_file_contents(vertexFile).c_str();
-	// const char* fragmentSource = get_file_contents(fragmentFile).c_str();
+Shader::Shader(const char *shaderSource, GLuint shaderType){
+	GLuint shader = CreateShader(shaderSource, shaderType);
 
-	// Create Vertex Shader Object and get its reference
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	// Attach Vertex Shader source to the Vertex Shader Object
-	glShaderSource(vertexShader, 1, &vertexSource, NULL);
-	// Compile the Vertex Shader into machine code
-	glCompileShader(vertexShader);
-	// Checks if Shader compiled succesfully
-	compileErrors(vertexShader, "VERTEX");
-	
-	// Create Fragment Shader Object and get its reference
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	// Attach Fragment Shader source to the Fragment Shader Object
-	glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-	// Compile the Vertex Shader into machine code
-	glCompileShader(fragmentShader);
-	// Checks if Shader compiled succesfully
-	compileErrors(fragmentShader, "FRAGMENT");
-
-	// Create Shader Program Object and get its reference
 	ID = glCreateProgram();
-	// Attach the Vertex and Fragment Shaders to the Shader Program
+	glAttachShader(ID, shader);
+	glLinkProgram(ID);
+	CompileErrors(ID, "PROGRAM");
+	glDeleteShader(shader);
+};
+
+Shader::Shader(const char* vertexSource, const char* fragmentSource) {
+	GLuint vertexShader = CreateShader(vertexSource, GL_VERTEX_SHADER);
+	GLuint fragmentShader = CreateShader(fragmentSource, GL_FRAGMENT_SHADER);
+
+	ID = glCreateProgram();
+
 	glAttachShader(ID, vertexShader);
 	glAttachShader(ID, fragmentShader);
-	// Wrap-up/Link all the shaders together into the Shader Program
-	glLinkProgram(ID);
-	// Checks if Shaders linked succesfully
-	compileErrors(ID, "PROGRAM");
 
-	// Delete the now useless Vertex and Fragment Shader objects
+	glLinkProgram(ID);
+
+	CompileErrors(ID, "PROGRAM");
+
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 }
 
-// Activates the Shader Program
-void Shader::Activate()
-{
+void Shader::Activate() {
 	glUseProgram(ID);
 }
 
-// Deletes the Shader Program
-void Shader::Delete()
-{
+void Shader::Delete() {
 	glDeleteProgram(ID);
 }
 
@@ -89,7 +99,7 @@ void Shader::UploadUniformMatrix4fv (const char* uniform, glm::mat4 matrix) {
 	glUniformMatrix4fv(texUni, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Shader::compileErrors(unsigned int shader, const char* type) {
+void Shader::CompileErrors(unsigned int shader, const char* type) {
 	// Stores status of compilation
 	GLint hasCompiled;
 	// Character array to store error message in
