@@ -9,11 +9,11 @@
 	// #include <GL/gl.h>
 	// #include <GLES3/gl3.h>
 #else
-	// #include <glad/glad.h>
-	#include "include/glad/glad.h"
-	#include "include/DG/DG_misc.h"
+	#include <glad/glad.h>
+	#include <DG/DG_misc.h>
 #endif
 
+#include <flecs.h>
 #include <GLFW/glfw3.h>
 
 #include "src/window.h"

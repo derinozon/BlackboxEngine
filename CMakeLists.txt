@@ -29,6 +29,16 @@ if(NOT glfw_POPULATED)
     add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 endif()
 
+FetchContent_Declare(
+	flecs
+	GIT_REPOSITORY https://github.com/SanderMertens/flecs
+)
+FetchContent_GetProperties(flecs)
+if(NOT flecs_POPULATED)
+    FetchContent_Populate(flecs)
+    add_subdirectory(${flecs_SOURCE_DIR} ${flecs_BINARY_DIR})
+endif()
+
 # GET SOURCE #
 file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/*.c" "lib/ImGUI/*.cpp")
 
@@ -36,6 +46,10 @@ file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/*.c" "lib/ImGUI/*.c
 add_library(blackbox STATIC blackbox.cpp ${src})
 target_include_directories(blackbox PUBLIC ./include ./src) #
 target_link_libraries(blackbox PUBLIC glfw)
+target_link_libraries(blackbox PUBLIC flecs::flecs_static)
+
+target_include_directories(blackbox PUBLIC ${flecs_SOURCE_DIR}/include)
+target_include_directories(blackbox PUBLIC ${glfw_SOURCE_DIR}/include)
 
 # BUILD DEMO EXECUTABLE #
 link_directories("./build")

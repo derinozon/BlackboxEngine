@@ -8,7 +8,7 @@ std::vector<float> mass;
 std::vector<glm::vec3> velocity;
 
 void Particle () {
-	const int particleSize = 500;
+	const int particleSize = 50;
 	std::srand(Time.time);
 	
 	auto spawnParticle = []() {
