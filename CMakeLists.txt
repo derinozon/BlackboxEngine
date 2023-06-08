@@ -44,10 +44,10 @@ file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/*.c" "lib/ImGUI/*.c
 
 # BUILD ENGINE AS STATIC LIBRARY #
 add_library(blackbox STATIC blackbox.cpp ${src})
-target_include_directories(blackbox PUBLIC ./include ./src) #
 target_link_libraries(blackbox PUBLIC glfw)
 target_link_libraries(blackbox PUBLIC flecs::flecs_static)
 
+target_include_directories(blackbox PUBLIC ./include ./src)
 target_include_directories(blackbox PUBLIC ${flecs_SOURCE_DIR}/include)
 target_include_directories(blackbox PUBLIC ${glfw_SOURCE_DIR}/include)
 

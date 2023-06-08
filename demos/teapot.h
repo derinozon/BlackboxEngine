@@ -1,5 +1,5 @@
-// #include "../src/editor.h"
-#include "../blackbox.h"
+#include "../src/editor.h"
+// #include "../blackbox.h"
 #include "../src/internal/res_UV.h"
 
 using namespace Blackbox;

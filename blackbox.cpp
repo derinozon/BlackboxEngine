@@ -1,6 +1,7 @@
 #include "blackbox.h"
 
 namespace Blackbox {
+	flecs::world world;
 
 	#ifdef __EMSCRIPTEN__
 	EMSCRIPTEN_KEEPALIVE int framebuffer_size_callback(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
@@ -31,7 +32,8 @@ namespace Blackbox {
 		glfwWindowHint(GLFW_RESIZABLE, resizable);
 
 		// glfwWindowHint(GLFW_DECORATED , 0);
-		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER , 1);
+		//GLFW_TRANSPARENT_FRAMEBUFFER
+		glfwWindowHint(0x0002000A , 1);
 
 		glfwWindowHint(GLFW_SAMPLES  , 8);
 		glfwWindowHint(GLFW_SRGB_CAPABLE, 1);
@@ -82,21 +84,19 @@ namespace Blackbox {
 
 		camera.perspective = true;
 
-		defaultShader = new Shader(
-			DEFAULT_UNLIT_VERT,
-			DEFAULT_UNLIT_FRAG
-		);
-
 		currentWindow = window;
 		return window;
 	}
-
 
 	int run (Window* window) {
 		// Enables the Depth Buffer
 		glEnable(GL_DEPTH_TEST);
 
-		
+		auto e = world.entity("Test");
+		e.add<Transform>();
+		e.add<Mesh>();
+		// e.set<Mesh>();
+		e.add<Material>();
 
 		auto loop = []{
 			Input.SetWindow(currentWindow->Get());
@@ -117,13 +117,62 @@ namespace Blackbox {
 			camera.UpdateMatrix();
 			OnUpdate.Invoke();
 
+			world.each([](Transform& tr, Mesh& vel, Material& mat) {
+				if (mat.shader == nullptr) {
+					mat.shader = new Shader(
+						DEFAULT_UNLIT_VERT,
+						DEFAULT_UNLIT_FRAG
+					);
+				}
+				if (mat.texture == nullptr) {
+					unsigned char white[] = {255,255,255};
+					mat.texture = new Texture(white, 1, 1, 3, GL_TEXTURE_2D);
+				}
+				
+				mat.shader->Activate();
+				mat.shader->UploadUniform4f("color", mat.color);
+				if (mat.texture != nullptr) {
+					mat.shader->UploadUniform1i("tex0", 0);
+					mat.texture->Bind();
+				}
+				
+				// Generate Model Matrix from Transform //
+				glm::mat4 model = glm::mat4(1.0f);
+				glm::vec3 finalPos = tr.position;
+				
+				model = glm::translate(model, finalPos);
+
+				model = glm::rotate(model, glm::radians(tr.rotation.x), glm::vec3(1,0,0));
+				model = glm::rotate(model, glm::radians(tr.rotation.y), glm::vec3(0,1,0));
+				model = glm::rotate(model, glm::radians(tr.rotation.z), glm::vec3(0,0,1));
+				model = glm::scale(model, tr.scale);
+				
+				if (mat.texture->width != mat.texture->height) {
+					double w = (double)(mat.texture->width);
+					double h = (double)(mat.texture->height);
+					double d = w > h ? w : h;
+					model = glm::scale(model, glm::vec3(w/d, h/d, 1.0) );
+				}
+
+				if (mat.shader != nullptr) {
+					mat.shader->UploadUniformMatrix4fv("_MVP", camera.projection * camera.view * model);
+				}
+
+				vel.Draw(*mat.shader);
+			});
+
 			// Draw Meshes //
 			for (Entity* obj: entityList) {
 				Transform& tr = obj->transform;
 				Mesh& vel = obj->mesh;
 				Material& mat = obj->material;
 				
-				if (mat.shader == nullptr) mat.shader = defaultShader;
+				if (mat.shader == nullptr) {
+					mat.shader = new Shader(
+						DEFAULT_UNLIT_VERT,
+						DEFAULT_UNLIT_FRAG
+					);
+				}
 				if (mat.texture == nullptr) {
 					unsigned char white[] = {255,255,255};
 					mat.texture = new Texture(white, 1, 1, 3, GL_TEXTURE_2D);

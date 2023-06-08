@@ -13,7 +13,11 @@
 	#include <DG/DG_misc.h>
 #endif
 
+#define FLECS_CUSTOM_BUILD
+#define FLECS_CPP
+#define FLECS_SYSTEM
 #include <flecs.h>
+
 #include <GLFW/glfw3.h>
 
 #include "src/window.h"
@@ -43,7 +47,6 @@
 namespace Blackbox {
 	
 	inline InputManager& Input = InputManager::Get();
-	inline Shader* defaultShader;
 	inline Camera camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
 	inline glm::vec4 clearColor(0.07f, 0.13f, 0.17f, 1.0f);
 
@@ -53,4 +56,5 @@ namespace Blackbox {
 	inline Action OnUpdate = Action();
 	inline Action OnDrawGUI = Action();
 	inline Action OnQuit = Action();
+	
 }
