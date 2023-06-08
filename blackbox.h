@@ -13,7 +13,6 @@
 	#include <DG/DG_misc.h>
 #endif
 
-#include <flecs.h>
 #include <GLFW/glfw3.h>
 
 #include "src/window.h"

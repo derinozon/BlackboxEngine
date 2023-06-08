@@ -7,8 +7,7 @@
 #include "resources.h"
 
 namespace Blackbox {
-	class Material {
-	public:
+	struct Material {
 		Material();
 		~Material();
 		Material(Shader* shader, Texture* texture);
