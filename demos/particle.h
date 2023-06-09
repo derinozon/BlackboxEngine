@@ -7,7 +7,7 @@ using namespace glm;
 std::vector<float> mass;
 std::vector<glm::vec3> velocity;
 
-void Particle () {
+void Particle (Engine* engine) {
 	const int particleSize = 50;
 	std::srand(Time.time);
 	
@@ -29,9 +29,9 @@ void Particle () {
 	}
 	
 	float col = 20.0/255.0;
-	clearColor = vec4(col, col, col, 1.0);
+	engine->clearColor = vec4(col, col, col, 1.0);
 
-	OnUpdate += []() {
+	engine->OnUpdate += []() {
         float G = 1;
         float dt = Time.deltaTime;
 		float damping = 0.1 * 4.0;

@@ -4,8 +4,12 @@ namespace Blackbox::Editor {
 	bool wireframe;
 	bool vsync = true;
 	int selectedObj = -1;
+	Engine* engine;
 
-	ImGuiIO& InitEditor (Window* window) {
+	ImGuiIO& InitEditor (Engine* eng) {
+		engine = eng;
+		Window* window = eng->currentWindow;
+
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -18,15 +22,12 @@ namespace Blackbox::Editor {
 		ImGui_ImplOpenGL3_Init("#version 330");
 		#endif
 
-		
-
-
-		OnUpdate += []() {
+		engine->OnUpdate += []() {
 			// Deleting objects on backspace or delete key //
 			#ifdef __APPLE__
-			bool cmd = (Input.GetKey(GLFW_KEY_LEFT_SUPER)||Input.GetKey(GLFW_KEY_RIGHT_SUPER))&&Input.GetKey(GLFW_KEY_BACKSPACE);
+			bool cmd = (engine->Input.GetKey(GLFW_KEY_LEFT_SUPER)||engine->Input.GetKey(GLFW_KEY_RIGHT_SUPER))&&engine->Input.GetKey(GLFW_KEY_BACKSPACE);
 			#else
-			bool cmd = Input.GetKey(GLFW_KEY_DELETE);
+			bool cmd = engine->Input.GetKey(GLFW_KEY_DELETE);
 			#endif
 			if (cmd && selectedObj>-1) {
 				delete entityList[selectedObj];
@@ -34,25 +35,25 @@ namespace Blackbox::Editor {
 			}
 
 			// Editor Camera movement //
-			float speed = 10 * Time.deltaTime * (Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
+			float speed = 10 * Time.deltaTime * (engine->Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
 		
-			camera.Position += speed * glm::vec3(1,0,0) * Input.GetAxisHorizontal();
-			camera.Position += speed * glm::vec3(0,0,-1) * Input.GetAxisVertical();
+			engine->camera.Position += speed * glm::vec3(1,0,0) * engine->Input.GetAxisHorizontal();
+			engine->camera.Position += speed * glm::vec3(0,0,-1) * engine->Input.GetAxisVertical();
 			
-			if (Input.GetKey(GLFW_KEY_E)) {
-				camera.Position += speed * glm::vec3(0,1,0);
+			if (engine->Input.GetKey(GLFW_KEY_E)) {
+				engine->camera.Position += speed * glm::vec3(0,1,0);
 			}
-			if (Input.GetKey(GLFW_KEY_Q)) {
-				camera.Position += speed * glm::vec3(0,-1,0);
+			if (engine->Input.GetKey(GLFW_KEY_Q)) {
+				engine->camera.Position += speed * glm::vec3(0,-1,0);
 			}
 		};
 
-		OnQuit += []() {
+		engine->OnQuit += []() {
 			Log("Destroying Editor");
 			Editor::DestroyEditor();
 		};
 
-		OnDrawGUI += []() {
+		engine->OnDrawGUI += []() {
 			NewFrame();
 
 			if (renderEditor) {

@@ -25,7 +25,7 @@
 namespace Blackbox::Editor {
 	inline bool renderEditor = true;
 
-	ImGuiIO& InitEditor(Window* window);
+	ImGuiIO& InitEditor(Engine* engine);
 	void DestroyEditor();
 	void Render();
 	void NewFrame();

@@ -1,10 +1,11 @@
 // #include "demos/dvd.h"
-// #include "demos/teapot.h"
-#include "demos/particle.h"
+#include "demos/teapot.h"
+// #include "demos/particle.h"
 
 int main() {
-	Window* window = Blackbox::init("Blackbox Engine");
-	// ImGuiIO& io = Editor::InitEditor(window);
-	Particle();
-	return Blackbox::run(window);
+	Engine* engine = new Engine();
+	Window* window = engine->init("Blackbox Engine");
+	ImGuiIO& io = Editor::InitEditor(engine);
+
+	return engine->run(window);
 }
