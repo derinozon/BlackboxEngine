@@ -155,7 +155,12 @@ namespace Blackbox {
 				mat.shader->UploadUniformMatrix4fv("_MVP", camera.projection * camera.view * model);
 			}
 
-			vel.Draw(*mat.shader);
+			// Draw Mesh //
+			glActiveTexture(GL_TEXTURE0);
+
+			glBindVertexArray(vel.VAO);
+			glDrawElements(GL_TRIANGLES, vel.indices.size(), GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
 		}
 		OnDrawGUI.Invoke();
 		

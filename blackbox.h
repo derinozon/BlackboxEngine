@@ -39,6 +39,8 @@
 #include "src/model.h"
 #include "src/random.h"
 
+#include "src/newecs.h"
+
 namespace Blackbox {
 
 	class Engine {

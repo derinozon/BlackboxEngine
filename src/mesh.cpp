@@ -3,15 +3,6 @@
 
 namespace Blackbox {
 
-	void Mesh::Draw(Shader &shader) {
-		// BIND TEXTURE //
-		glActiveTexture(GL_TEXTURE0);
-
-		// draw mesh
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-	}  
 
 	void Mesh::setupMesh() {
 		glGenVertexArrays(1, &VAO);

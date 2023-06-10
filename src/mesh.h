@@ -12,24 +12,19 @@ namespace Blackbox {
 		glm::vec2 TexCoords;
 	};
 
-	class Mesh {
+	struct Mesh {
 		public:
 			// mesh data
 			std::vector<Vertex> vertices;
 			std::vector<uint32_t> indices;
 			std::string resourceHandle;
-			//std::vector<Texture>      textures;
 
 			Mesh();
 			Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices);
 			~Mesh();
 
-			void Draw(Shader &shader);
-
 			void setupMesh();
 
-		private:
-			//  render data
 			uint32_t VAO, VBO, EBO;
 	};
 }
