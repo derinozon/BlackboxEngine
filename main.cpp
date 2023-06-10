@@ -9,11 +9,7 @@ int main() {
 	Window* window = engine->init("Blackbox Engine");
 	ImGuiIO& io = Editor::InitEditor(engine);
 	
-	ParticleECS(engine);
-
-
-	engine->OnUpdate += []{
-	};
+	// ParticleECS(engine);
 
 	engine->run(window);
 	delete engine;

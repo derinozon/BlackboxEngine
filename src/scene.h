@@ -7,5 +7,5 @@
 namespace Blackbox {
 	class Entity;
 
-	inline std::vector<Entity*> entityList = std::vector<Entity*>();
+	// inline std::vector<Entity*> entityList = std::vector<Entity*>();
 }

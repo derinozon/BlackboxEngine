@@ -14,6 +14,7 @@
 #endif
 
 #include <GLFW/glfw3.h>
+#include "ECS.h"
 
 #include "src/window.h"
 
@@ -33,20 +34,16 @@
 #include "src/shader.h"
 #include "src/camera.h"
 #include "src/input.h"
-#include "src/scene.h"
-#include "src/entity.h"
 #include "src/primitive.h"
 #include "src/model.h"
 #include "src/random.h"
-
-#include "src/newecs.h"
 
 namespace Blackbox {
 
 	class Engine {
 		public:
 		ECS::World* world;
-		
+
 		InputManager& Input = InputManager::Get();
 		Shader* defaultShader;
 		Camera camera;
@@ -62,12 +59,6 @@ namespace Blackbox {
 		Engine(){};
 
 		private:
-		GLFWframebuffersizefun framebuffer_size_callback = [](GLFWwindow* window, int width, int height) {
-			glViewport(0, 0, width, height);
-			// camera.width = width;
-			// camera.height = height;
-		};
-
-		void loop();
+		// void loop();
 	};
 }
