@@ -21,6 +21,7 @@ public:
 	Texture(const char* image, GLenum texType = GL_TEXTURE_2D);
 	~Texture();
 
+	void GetPixelData();
 	void texUnit(Shader& shader, const char* uniform, GLuint unit);
 	void Bind();
 	void Unbind();

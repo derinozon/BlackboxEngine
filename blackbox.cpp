@@ -82,6 +82,8 @@ namespace Blackbox {
 
 		glfwSetDropCallback(window->Get(), drop_callback);
 
+		// glfwSetKeyCallback(window->Get(), Input.keyCallback);
+
 		camera.perspective = true;
 
 		defaultShader = new Shader(

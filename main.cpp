@@ -2,10 +2,13 @@
 #include "demos/teapot.h"
 // #include "demos/particle.h"
 
+Engine* engine;
+
 int main() {
-	Engine* engine = new Engine();
+	engine = new Engine();
 	Window* window = engine->init("Blackbox Engine");
 	ImGuiIO& io = Editor::InitEditor(engine);
-
-	return engine->run(window);
+	engine->run(window);
+	delete engine;
+	return 0;
 }
