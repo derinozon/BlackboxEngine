@@ -4,9 +4,6 @@
 
 Engine* engine;
 
-
-
-
 int main() {
 	engine = new Engine();
 	Window* window = engine->init("Blackbox Engine");

@@ -45,6 +45,8 @@ namespace Blackbox {
 
 	class Engine {
 		public:
+		ECS::World* world;
+		
 		InputManager& Input = InputManager::Get();
 		Shader* defaultShader;
 		Camera camera;
