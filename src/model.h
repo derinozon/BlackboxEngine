@@ -23,7 +23,7 @@ namespace Blackbox {
 		auto m = scene.meshes.at(0).name.c_str();
 		
 		
-		Entity* ent = CreateQuad(m);
+		// Entity* ent = CreateQuad(m);
 		// ent->mesh = Mesh(scene.meshes.at(0));
 	}
 

@@ -7,8 +7,11 @@
 // 	#include <glad/glad.h>
 // #endif
 
+#include "ECS.h"
+
+#include "transform.h"
 #include "mesh.h"
-#include "entity.h"
+#include "material.h"
 
 namespace Blackbox {
 	/*
@@ -34,6 +37,5 @@ namespace Blackbox {
 
 	
 
-	Entity* CreateQuad (const char* label);
-	Entity* CreateQuad ();
+	ECS::Entity* CreateQuad (ECS::World* world);
 }

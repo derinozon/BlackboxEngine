@@ -64,40 +64,40 @@ void Texture::GenerateGLTexture (unsigned char data[], GLenum texType) {
 	glBindTexture(texType, 0);
 }
 
-void Texture::GetPixelData() {
-	GLuint fbo;
-	glGenFramebuffers(1, &fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+// void Texture::GetPixelData() {
+// 	GLuint fbo;
+// 	glGenFramebuffers(1, &fbo);
+// 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID, 0);
+// 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ID, 0);
 
-	// Create a PBO
-	GLuint pbo;
-	glGenBuffers(1, &pbo);
-	glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
-	glBufferData(GL_PIXEL_PACK_BUFFER, width * height * 4, nullptr, GL_STREAM_READ);
-	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+// 	// Create a PBO
+// 	GLuint pbo;
+// 	glGenBuffers(1, &pbo);
+// 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+// 	glBufferData(GL_PIXEL_PACK_BUFFER, width * height * 4, nullptr, GL_STREAM_READ);
+// 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
-	// Read the pixels from the framebuffer into the PBO
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-	glReadBuffer(GL_COLOR_ATTACHMENT0);
-	glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
-	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+// 	// Read the pixels from the framebuffer into the PBO
+// 	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+// 	glReadBuffer(GL_COLOR_ATTACHMENT0);
+// 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+// 	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+// 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+// 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	// Map the PBO
-	glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
-	GLubyte* pixels = (GLubyte*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
+// 	// Map the PBO
+// 	glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
+// 	GLubyte* pixels = (GLubyte*)glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY);
 
-	// Save the image using stb_image_write
-	stbi_write_png("output.png", width, height, 4, pixels, width * 4);
+// 	// Save the image using stb_image_write
+// 	stbi_write_png("output.png", width, height, 4, pixels, width * 4);
 
-	// Unmap the PBO
-	glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
-	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
+// 	// Unmap the PBO
+// 	glUnmapBuffer(GL_PIXEL_PACK_BUFFER);
+// 	glBindBuffer(GL_PIXEL_PACK_BUFFER, 0);
 
-}
+// }
 
 void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit) {
 	GLuint texUni = glGetUniformLocation(shader.ID, uniform);

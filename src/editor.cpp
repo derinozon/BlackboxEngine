@@ -30,7 +30,7 @@ namespace Blackbox::Editor {
 			bool cmd = engine->Input.GetKey(GLFW_KEY_DELETE);
 			#endif
 			if (cmd && selectedObj>-1) {
-				delete entityList[selectedObj];
+				delete engine->world->getByIndex(selectedObj);
 				selectedObj = -1;
 			}
 
@@ -102,13 +102,13 @@ namespace Blackbox::Editor {
 			ImGui::Begin("Hierarchy");
 			if (ImGui::BeginPopupContextWindow()) {
 				if (ImGui::MenuItem("New Entity")) {
-					CreateQuad();
+					CreateQuad(engine->world);
 				}
 
 				ImGui::EndPopup();
 			}
-			for (int i = 0; i < entityList.size(); i++) {
-				if ( ImGui::Selectable((entityList[i]->name + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
+			for (int i = 0; i < engine->world->getCount(); i++) {
+				if ( ImGui::Selectable((engine->world->getByIndex(i)->getEntityId() + "##" +std::to_string(i)).c_str(), i==selectedObj) ) {
 					selectedObj = i;
 				}
 			}
@@ -118,16 +118,18 @@ namespace Blackbox::Editor {
 		auto Inspector = []() {
 			ImGui::Begin("Inspector");
 			if (selectedObj > -1) {
-				Entity* obj = entityList[selectedObj];
+				ECS::Entity* obj = engine->world->getByIndex(selectedObj);
+				auto objTransform = obj->get<Transform>();
+				auto objMat = obj->get<Material>();
 
-				obj->transform.position = Editor::DragFloat3("Position", obj->transform.position);
-				obj->transform.rotation = Editor::DragFloat3("Rotation", obj->transform.rotation, 0.5);
-				obj->transform.scale = Editor::DragFloat3("Scale", obj->transform.scale);
+				objTransform->position = Editor::DragFloat3("Position", objTransform->position);
+				objTransform->rotation = Editor::DragFloat3("Rotation", objTransform->rotation, 0.5);
+				objTransform->scale = Editor::DragFloat3("Scale", objTransform->scale);
 
-				obj->material.color = Editor::ColorField("Color", obj->material.color);
+				objMat->color = Editor::ColorField("Color", objMat->color);
 				
 				Editor::Label("Image");
-				Editor::ImageField(obj->material.texture);
+				Editor::ImageField(objMat->texture);
 			}
 			ImGui::End();
 		};

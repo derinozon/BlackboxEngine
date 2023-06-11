@@ -2,7 +2,7 @@
 
 namespace Blackbox {
 
-	Entity* CreateQuad (const char* label) {
+	ECS::Entity* CreateQuad (ECS::World* world) {
 		// Indices for vertices order
 		std::vector<unsigned int> pindices = {
 			0, 1, 2,
@@ -17,12 +17,10 @@ namespace Blackbox {
 			{glm::vec3(-0.5f, 0.5f, 0.0f),   glm::vec3(1.0f, 1.0f, 1.0f),   glm::vec2(0.0f, 1.0f)}    // top left 
 		};
 
-		Entity* ent = new Entity(label);
-		ent->mesh = Mesh(pvertices, pindices);
-		ent->mesh.resourceHandle = "QUAD";
+		ECS::Entity* ent = world->create();
+		ent->assign<Transform>();
+		ent->assign<Mesh>(pvertices, pindices);
+		ent->assign<Material>();
 		return ent;
-	}
-	Entity* CreateQuad () {
-		return CreateQuad("Quad");
 	}
 }
