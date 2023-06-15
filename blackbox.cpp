@@ -4,8 +4,8 @@ namespace Blackbox {
 
 	#ifdef __EMSCRIPTEN__
 	EMSCRIPTEN_KEEPALIVE int framebuffer_size_callback(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
-		// int width = uiEvent->windowInnerWidth;
-		// int height = uiEvent->windowInnerHeight;
+		int width = uiEvent->windowInnerWidth;
+		int height = uiEvent->windowInnerHeight;
 		// emscripten_get_canvas_element_size("canvas", &width, &height);
 
 
@@ -15,7 +15,7 @@ namespace Blackbox {
 		// int width = (int) cw;
 		// int height = (int) ch;
 
-		// glViewport(0, 0, width, height);
+		glViewport(0, 0, width, height);
 		// camera.width = width;
 		// camera.height = height;
 		return 0;
@@ -105,7 +105,7 @@ namespace Blackbox {
 		return window;
 	}
 
-	void loop (void* arg){
+	void Engine::loop (void* arg){
 		Engine* engine = static_cast<Engine*>(arg);
 		engine->Input.SetWindow(engine->currentWindow->Get());
 
@@ -192,7 +192,7 @@ namespace Blackbox {
 		#endif
 
 		world->destroyWorld();
-
+		delete window;
 		OnQuit.Invoke();
 
 		glfwDestroyWindow(window->Get());

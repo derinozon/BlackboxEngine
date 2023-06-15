@@ -5,45 +5,20 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp>
+
 class Window {
 public:
-	GLFWwindow* Get () {
-		return window;
-	}
-
-	void MakeFullscreen () {
-		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
- 		glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-	}
-
-	void MakeWindowed () {
-		GLFWmonitor* monitor = glfwGetWindowMonitor(window);
-		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
- 		glfwSetWindowMonitor(window, NULL, 0, 0, mode->width, mode->height, mode->refreshRate);
-	}
-
-	Window (const char* title, int width, int height, bool fullscreen) {
-		unsigned int wWidth = width;
-		unsigned int wHeight = height;
-		#ifdef __APPLE__
-			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-			// glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GL_TRUE);
-			wWidth = width/2;
-			wHeight = height/2;
-		#endif
-		// Create Window
-		window = glfwCreateWindow(
-			wWidth, wHeight,
-			title,
-			fullscreen ? glfwGetPrimaryMonitor() : NULL,
-			NULL
-		);
-		Log("Created window");
-	}
-	~Window() {
-		Log("Destroying Window");
-	}
+	GLFWwindow* Get ();
+	glm::vec2 GetSize ();
+	void MakeFullscreen ();
+	void MakeWindowed ();
+	Window (const char* title, int width, int height, bool fullscreen);
+	~Window();
 
 private:
 	GLFWwindow* window;

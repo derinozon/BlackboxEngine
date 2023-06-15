@@ -59,6 +59,6 @@ namespace Blackbox {
 		Engine(){};
 
 		private:
-		// void loop();
+		void loop(void* arg);
 	};
 }
