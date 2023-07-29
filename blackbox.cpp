@@ -6,24 +6,20 @@ namespace Blackbox {
 	EMSCRIPTEN_KEEPALIVE int framebuffer_size_callback(int eventType, const EmscriptenUiEvent* uiEvent, void* userData) {
 		int width = uiEvent->windowInnerWidth;
 		int height = uiEvent->windowInnerHeight;
-		// emscripten_get_canvas_element_size("canvas", &width, &height);
 
+		emscripten_set_canvas_element_size("#canvas", width, height);
+		Camera* camera = static_cast<Camera*>(userData);
 
-
-		// double cw, ch;
-		// emscripten_get_element_css_size("canvas", &cw, &ch);
-		// int width = (int) cw;
-		// int height = (int) ch;
-
+		camera->width = width;
+		camera->height = height;
 		glViewport(0, 0, width, height);
-		// camera.width = width;
-		// camera.height = height;
+		Log("Window resize: ", width, " ", height);
 		return 0;
 	}
 	#endif
 
 	Window* Engine::init (const char* title, int width, int height, bool fullscreen, bool vsync, bool resizable) {
-		camera = Camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
+		camera = new Camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
 		clearColor = glm::vec4(0.07f, 0.13f, 0.17f, 1.0f);
 		
 		// Initialize GLFW
@@ -69,14 +65,13 @@ namespace Blackbox {
 
 
 		#ifdef __EMSCRIPTEN__
-			// Work in progress not 
-			emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, &framebuffer_size_callback);
+			emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, camera, 1, &framebuffer_size_callback);
 		#else
 			auto framebuffer_size_callback = [](GLFWwindow* window, int width, int height) {
 				Engine* engine = static_cast<Engine*>(glfwGetWindowUserPointer(window));
+				engine->camera->width = width;
+				engine->camera->height = height;
 				glViewport(0, 0, width, height);
-				engine->camera.width = width;
-				engine->camera.height = height;
 			};
 			glfwSetFramebufferSizeCallback(window->Get(), framebuffer_size_callback);
 			framebuffer_size_callback(window->Get(), width, height);
@@ -93,7 +88,7 @@ namespace Blackbox {
 
 		glfwSetDropCallback(window->Get(), drop_callback);
 
-		camera.perspective = true;
+		camera->perspective = true;
 
 		defaultShader = new Shader(
 			DEFAULT_UNLIT_VERT,
@@ -122,7 +117,7 @@ namespace Blackbox {
 		// Clean the back buffer and depth buffer //
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		engine->camera.UpdateMatrix();
+		engine->camera->UpdateMatrix();
 		engine->OnUpdate.Invoke();
 		engine->world->tick(Time.deltaTime);
 
@@ -162,7 +157,7 @@ namespace Blackbox {
 				}
 
 				if (mat->shader != nullptr) {
-					mat->shader->UploadUniformMatrix4fv("_MVP", engine->camera.projection * engine->camera.view * model);
+					mat->shader->UploadUniformMatrix4fv("_MVP", engine->camera->projection * engine->camera->view * model);
 				}
 
 				// Draw Mesh //
@@ -184,13 +179,14 @@ namespace Blackbox {
 		glEnable(GL_DEPTH_TEST);
 		
 		#ifdef __EMSCRIPTEN__
-		emscripten_set_main_loop_arg(&loop, this, 0, 1);
+		emscripten_set_main_loop_arg(emscriptenLoop, this, 0, 1);
 		#else
 		while (!glfwWindowShouldClose(window->Get())) {
 			loop(this);
 		}
 		#endif
 
+		delete camera;
 		world->destroyWorld();
 		delete window;
 		OnQuit.Invoke();

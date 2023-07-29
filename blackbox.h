@@ -46,7 +46,7 @@ namespace Blackbox {
 
 		InputManager& Input = InputManager::Get();
 		Shader* defaultShader;
-		Camera camera;
+		Camera* camera;
 		glm::vec4 clearColor;
 
 		int run(Window* window);
@@ -55,6 +55,11 @@ namespace Blackbox {
 		Action OnUpdate = Action();
 		Action OnDrawGUI = Action();
 		Action OnQuit = Action();
+
+		static void emscriptenLoop(void* arg) {
+            Engine* engine = static_cast<Engine*>(arg);
+            engine->loop(arg);
+        }
 
 		Engine(){};
 

@@ -1,22 +1,17 @@
 cmake_minimum_required(VERSION 3.21)
 set (CMAKE_CXX_STANDARD 17)
+
 set (CMAKE_BUILD_TYPE Debug)
 # set (CMAKE_BUILD_TYPE Release)
+
 project(blackbox)
 
 include(FetchContent)
 
-if(NOT WIN32)
-	string(ASCII 27 Esc)
-	set(ColorReset "${Esc}[m")
-	set(ColorBold  "${Esc}[1m")
-	set(BoldCyan   "${Esc}[1;36m")
-endif()
-message("${BoldCyan}Building dependencies, this might take a while${ColorReset}")
-
 FetchContent_Declare(
 	glfw
 	GIT_REPOSITORY https://github.com/glfw/glfw
+	GIT_PROGRESS    TRUE
 )
 FetchContent_GetProperties(glfw)
 if(NOT glfw_POPULATED)
@@ -34,14 +29,12 @@ file(GLOB src CONFIGURE_DEPENDS "src/*.cpp" "lib/*.cpp" "lib/*.c" "lib/ImGUI/*.c
 
 # BUILD ENGINE AS STATIC LIBRARY #
 add_library(blackbox STATIC blackbox.cpp ${src})
-target_include_directories(blackbox PUBLIC ./include ./src) #
+target_include_directories(blackbox PUBLIC ${glfw_SOURCE_DIR}/include ./include ./src)
 target_link_libraries(blackbox PUBLIC glfw)
-
-target_include_directories(blackbox PUBLIC ${glfw_SOURCE_DIR}/include)
 
 # BUILD DEMO EXECUTABLE #
 link_directories("./build")
-add_executable(app main.cpp)
+add_executable(app demos/main.cpp)
 target_link_libraries(app PUBLIC blackbox)
 
 target_compile_definitions(app PUBLIC LITE)

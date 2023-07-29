@@ -3,7 +3,6 @@
 
 namespace Blackbox {
 
-
 	void Mesh::setupMesh() {
 		glGenVertexArrays(1, &VAO);
 		glGenBuffers(1, &VBO);
@@ -15,8 +14,7 @@ namespace Blackbox {
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);  
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), 
-					&indices[0], GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), &indices[0], GL_STATIC_DRAW);
 
 		// vertex positions
 		glEnableVertexAttribArray(0);	

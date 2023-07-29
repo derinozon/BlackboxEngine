@@ -37,14 +37,14 @@ namespace Blackbox::Editor {
 			// Editor Camera movement //
 			float speed = 10 * Time.deltaTime * (engine->Input.GetKey(GLFW_KEY_LEFT_SHIFT) ? 4 : 1);
 		
-			engine->camera.Position += speed * glm::vec3(1,0,0) * engine->Input.GetAxisHorizontal();
-			engine->camera.Position += speed * glm::vec3(0,0,-1) * engine->Input.GetAxisVertical();
+			engine->camera->Position += speed * glm::vec3(1,0,0) * engine->Input.GetAxisHorizontal();
+			engine->camera->Position += speed * glm::vec3(0,0,-1) * engine->Input.GetAxisVertical();
 			
 			if (engine->Input.GetKey(GLFW_KEY_E)) {
-				engine->camera.Position += speed * glm::vec3(0,1,0);
+				engine->camera->Position += speed * glm::vec3(0,1,0);
 			}
 			if (engine->Input.GetKey(GLFW_KEY_Q)) {
-				engine->camera.Position += speed * glm::vec3(0,-1,0);
+				engine->camera->Position += speed * glm::vec3(0,-1,0);
 			}
 		};
 
