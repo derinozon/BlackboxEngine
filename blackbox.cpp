@@ -16,10 +16,20 @@ namespace Blackbox {
 		Log("Window resize: ", width, " ", height);
 		return 0;
 	}
+
+	void getViewportSize(int& width, int& height) {
+		width = EM_ASM_INT({
+			return window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		});
+		height = EM_ASM_INT({
+			return window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+		});
+	}
+
 	#endif
 
 	Window* Engine::init (const char* title, int width, int height, bool fullscreen, bool vsync, bool resizable) {
-		camera = new Camera(1600, 900, glm::vec3(0.0f, 0.0f, 5.0f));
+		camera = new Camera(width, height, glm::vec3(0.0f, 0.0f, 5.0f));
 		clearColor = glm::vec4(0.07f, 0.13f, 0.17f, 1.0f);
 		
 		// Initialize GLFW
@@ -41,8 +51,7 @@ namespace Blackbox {
 		glfwWindowHint(GLFW_SAMPLES  , 8);
 		glfwWindowHint(GLFW_SRGB_CAPABLE, 1);
 
-		std::cout << "Init success" << std::endl;
-		
+		Log("Init success");
 		
 		Window* window = new Window(title, width, height, fullscreen);
 		
@@ -52,10 +61,10 @@ namespace Blackbox {
 		}
 		
 		glfwSetWindowUserPointer(window->Get(), this);
-		std::cout << "Window success" << std::endl;
+		Log("Window success");
 
 		glfwMakeContextCurrent(window->Get());
-		std::cout << "Ctx success" << std::endl;
+		Log("GLContext success");
 		
 		//Load GLAD so it configures OpenGL
 		#ifndef __EMSCRIPTEN__
@@ -66,6 +75,13 @@ namespace Blackbox {
 
 		#ifdef __EMSCRIPTEN__
 			emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, camera, 1, &framebuffer_size_callback);
+			int viewportWidth, viewportHeight;
+			getViewportSize(viewportWidth, viewportHeight);
+
+			emscripten_set_canvas_element_size("#canvas", viewportWidth, viewportHeight);
+			camera->width = viewportWidth;
+			camera->height = viewportHeight;
+			glViewport(0, 0, viewportWidth, viewportHeight);
 		#else
 			auto framebuffer_size_callback = [](GLFWwindow* window, int width, int height) {
 				Engine* engine = static_cast<Engine*>(glfwGetWindowUserPointer(window));
@@ -77,7 +93,7 @@ namespace Blackbox {
 			framebuffer_size_callback(window->Get(), width, height);
 		#endif
 
-		std::cout << "Viewport success" << std::endl;
+		Log("Viewport success");
 
 		auto drop_callback = [] (GLFWwindow* window, int count, const char** paths) {
 			const char* name = paths[0];

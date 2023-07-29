@@ -1,5 +1,7 @@
 #pragma once
 
+#define BLACKBOX_DEBUG 0
+
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 	#include <emscripten/html5.h>
@@ -16,10 +18,8 @@
 #include <GLFW/glfw3.h>
 #include "ECS.h"
 
-#include "src/window.h"
-
 #include "src/debug.h"
-
+#include "src/window.h"
 // #include "serialization.h"
 #include "src/action.h"
 #include "src/gametime.h"

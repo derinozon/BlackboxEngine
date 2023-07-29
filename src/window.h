@@ -11,15 +11,17 @@
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
 
-class Window {
-public:
-	GLFWwindow* Get ();
-	glm::vec2 GetSize ();
-	void MakeFullscreen ();
-	void MakeWindowed ();
-	Window (const char* title, int width, int height, bool fullscreen);
-	~Window();
+namespace Blackbox {
+	class Window {
+	public:
+		GLFWwindow* Get ();
+		glm::vec2 GetSize ();
+		void MakeFullscreen ();
+		void MakeWindowed ();
+		Window (const char* title, int width, int height, bool fullscreen);
+		~Window();
 
-private:
-	GLFWwindow* window;
-};
+	private:
+		GLFWwindow* window;
+	};
+}

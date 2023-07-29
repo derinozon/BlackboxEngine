@@ -9,8 +9,8 @@ int main() {
 	Window* window = engine->init("Blackbox Engine");
 	// ImGuiIO& io = Editor::InitEditor(engine);
 		
-	// ParticleECS(engine);
-	Teapot(engine);
+	ParticleECS(engine);
+	// Teapot(engine);
 
 	engine->run(window);
 	delete engine;
