@@ -109,14 +109,14 @@ namespace Blackbox {
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &hasCompiled);
 			if (hasCompiled == GL_FALSE) {
 				glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-				Log("Error Compiling Shader: ", type, "\n", infoLog);
+				LogError("Error Compiling Shader: ", type, "\n", infoLog);
 			}
 		}
 		else {
 			glGetProgramiv(shader, GL_LINK_STATUS, &hasCompiled);
 			if (hasCompiled == GL_FALSE) {
 				glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-				Log("Error Linking Shader: ", type, "\n", infoLog);
+				LogError("Error Linking Shader: ", type, "\n", infoLog);
 			}
 		}
 	}

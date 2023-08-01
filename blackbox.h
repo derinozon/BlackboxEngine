@@ -1,7 +1,5 @@
 #pragma once
 
-#define BLACKBOX_DEBUG 0
-
 #ifdef __EMSCRIPTEN__
 	#include <emscripten.h>
 	#include <emscripten/html5.h>
@@ -40,26 +38,32 @@
 
 namespace Blackbox {
 
+	typedef struct {
+		const char* title = "Default Title";
+		int width = 1600;
+		int height = 900;
+		bool fullscreen = false;
+		bool vsync = true;
+		bool resizable = true;
+	} Configuration;
 	class Engine {
 		public:
 		ECS::World* world;
 
 		InputManager& Input = InputManager::Get();
-		Shader* defaultShader;
 		Camera* camera;
 		glm::vec4 clearColor;
 
+		/// @brief Runs the engine
+		/// @param window 
+		/// @return 
 		int run(Window* window);
 		Window* init(const char* title, int width = 1600, int height = 900, bool fullscreen = false, bool vsync = true, bool resizable = true);
+		Window* init(Configuration configuration);
 		Window* currentWindow;
 		Action OnUpdate = Action();
 		Action OnDrawGUI = Action();
 		Action OnQuit = Action();
-
-		static void emscriptenLoop(void* arg) {
-            Engine* engine = static_cast<Engine*>(arg);
-            engine->loop(arg);
-        }
 
 		Engine(){};
 

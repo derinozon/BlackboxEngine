@@ -170,7 +170,6 @@ namespace Blackbox {
 			if (parent == nullptr) {
 				parent = CreateQuad(mesh->mName.C_Str());
 				parent->mesh = processMesh(mesh, scene);
-				Log("PARENT");
 			}
 			else {
 				parent->mesh = CombineMesh(parent->mesh, processMesh(mesh, scene));

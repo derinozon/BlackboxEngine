@@ -33,10 +33,10 @@ namespace Blackbox {
 			fullscreen ? glfwGetPrimaryMonitor() : NULL,
 			NULL
 		);
-		Log("Created window");
+		LogInternal("Created window");
 	}
 	Window::~Window() {
-		Log("Destroying Window");
+		LogInternal("Destroying Window");
 		glfwDestroyWindow(window);
 	}
 }

@@ -2,13 +2,13 @@
 
 namespace Blackbox {
 	Material::Material () {
-		Log("Default Material");
+		LogInternal("Default Material");
 	}
 
 	Material::Material (Shader* shader, Texture* texture) {
 		this->shader = shader;
 		this->texture = texture;
-		Log("Adding Material");
+		LogInternal("Adding Material");
 	}
 
 	Material::Material (const char* texturePath) {
@@ -18,6 +18,6 @@ namespace Blackbox {
 	}
 
 	Material::~Material() {
-		Log("Destroying Material");
+		LogInternal("Destroying Material");
 	}
 }

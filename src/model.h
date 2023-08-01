@@ -40,8 +40,8 @@ namespace Blackbox {
 			tinyobj::LoadObj(&attrib, &shapes, &materials, &err, &src);
 		}	
 
-		if (!warn.empty()) Log(warn);
-		if (!err.empty()) Log(err);
+		if (!warn.empty()) LogInternal(warn);
+		if (!err.empty()) LogError(err);
 
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;
@@ -98,8 +98,8 @@ namespace Blackbox {
 			tinyobj::LoadObj(&attrib, &shapes, &materials, &err, inputfile.c_str());
 		}
 
-		if (!warn.empty()) Log(warn);
-		if (!err.empty()) Log(err);
+		if (!warn.empty()) LogInternal(warn);
+		if (!err.empty()) LogError(err);
 
 		std::vector<Vertex> vertices;
 		std::vector<uint32_t> indices;

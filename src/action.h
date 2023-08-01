@@ -7,6 +7,8 @@ namespace Blackbox {
 		public:
 			Action () {}
 
+			// TODO: Switch to std::function
+
 			void Invoke () {
 				for (int i = 0; i < functions.size(); i++) {
 					functions[i]();

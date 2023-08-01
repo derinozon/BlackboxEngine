@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.21)
 set (CMAKE_CXX_STANDARD 17)
 
-# set (CMAKE_BUILD_TYPE Debug)
-set (CMAKE_BUILD_TYPE Release)
+set (CMAKE_BUILD_TYPE Debug)
+# set (CMAKE_BUILD_TYPE Release)
 
 project(blackbox)
 
@@ -50,11 +50,3 @@ if (WIN32)
 		target_link_options(app PRIVATE -mconsole)
 	endif (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif (WIN32)
-
-if (UNIX)
-message("${BoldCyan}Copying resources folder${ColorReset}")
-execute_process (
-    COMMAND bash -c "cp -fR ../res ."
-    OUTPUT_VARIABLE outVar
-)
-endif (UNIX)

@@ -49,7 +49,7 @@ namespace Blackbox::Editor {
 		};
 
 		engine->OnQuit += []() {
-			Log("Destroying Editor");
+			LogInternal("Destroying Editor");
 			Editor::DestroyEditor();
 		};
 
@@ -64,7 +64,7 @@ namespace Blackbox::Editor {
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		};
 
-		Log("Editor Initialized");
+		LogInternal("Editor Initialized");
 
 		// io.Fonts->AddFontFromFileTTF("./res/Roboto-Light.ttf", 12);
 		ImGuiStyle& style = ImGui::GetStyle();

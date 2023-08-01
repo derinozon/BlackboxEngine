@@ -13,7 +13,7 @@ namespace Blackbox {
 		unsigned char* data = stbi_load(image, &width, &height, &colorChannels, 0);
 		
 		if (!data) {
-			Log("Problem loading texture");
+			LogInternal("Problem loading texture");
 		}
 
 		GenerateGLTexture(data);
@@ -25,7 +25,7 @@ namespace Blackbox {
 		type = texType;
 
 		if (!bytes) {
-			Log("Problem loading texture");
+			LogInternal("Problem loading texture");
 		}
 		width = widthImg; height = heightImg; colorChannels = numColCh;
 		GenerateGLTexture(bytes);
@@ -38,7 +38,7 @@ namespace Blackbox {
 
 		stbi_uc* data = stbi_load_from_memory(bytes, len, &width, &height, &colorChannels, desiredChannels);
 		if (!data) {
-			Log("Problem loading texture");
+			LogInternal("Problem loading texture");
 		}
 		GenerateGLTexture(data);
 		stbi_image_free(data);
@@ -117,6 +117,6 @@ namespace Blackbox {
 
 	Texture::~Texture() {
 		glDeleteTextures(1, &ID);
-		Log("Deleting Texture");
+		LogInternal("Deleting Texture");
 	}
 }

@@ -30,7 +30,7 @@ namespace Blackbox {
 	}
 
 	Mesh::Mesh() {
-		Log("Default Mesh");
+		LogInternal("Default Mesh");
 	}
 
 	Mesh::Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices) {
@@ -38,10 +38,10 @@ namespace Blackbox {
 		this->indices = indices;
 
 		setupMesh();
-		Log("Adding Mesh");
+		LogInternal("Adding Mesh");
 	}
 
 	Mesh::~Mesh() {
-		Log("Destroying Mesh");
+		LogInternal("Destroying Mesh");
 	}
 }

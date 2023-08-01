@@ -2,25 +2,31 @@
 
 #include <iostream>
 
-#ifndef BLACKBOX_DEBUG
-	#define BLACKBOX_DEBUG 1
-#endif
-
 namespace Blackbox {
 
-	#if BLACKBOX_DEBUG == 1
+    static char LOG_INFO = 1;
+	static char LOG_ERRORS = 2;
+    static char LOG_INTERNAL = 4;
+	static unsigned char debugFlags = LOG_INFO | LOG_ERRORS;
+
 	template<class... Args>
 	static void Log (Args... args) {
-		(std::cout << ... << args) << std::endl;
+		if ((debugFlags & LOG_INFO) == LOG_INFO) {
+			(std::cout << ... << args) << std::endl;
+		}
 	}
 
-	static void Log (const char* msg) {
-		std::cout << msg << std::endl;
-	}
-	#else
 	template<class... Args>
-	static void Log (Args... args){}
+	static void LogError (Args... args) {
+		if ((debugFlags & LOG_ERRORS) == LOG_ERRORS) {
+			(std::cout << ... << args) << std::endl;
+		}
+	}
 
-	static void Log (const char* msg){}
-	#endif
+	template<class... Args>
+	static void LogInternal (Args... args) {
+		if ((debugFlags & LOG_INTERNAL) == LOG_INTERNAL) {
+			(std::cout << ... << args) << std::endl;
+		}
+	}
 }

@@ -7,7 +7,7 @@ namespace Blackbox {
 		std::string ReadFile(std::string filePath) {
 			std::ifstream file(resFolder+filePath);
 			if (!file) {
-				Log("Failed to open file : ", filePath);
+				LogError("Failed to open file : ", filePath);
 				return "";
 			}
 

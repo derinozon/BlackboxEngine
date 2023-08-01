@@ -13,7 +13,7 @@ namespace Blackbox {
 		camera->width = width;
 		camera->height = height;
 		glViewport(0, 0, width, height);
-		Log("Window resize: ", width, " ", height);
+		LogInternal("Window resize: ", width, " ", height);
 		return 0;
 	}
 
@@ -26,7 +26,22 @@ namespace Blackbox {
 		});
 	}
 
+	static void emscriptenLoop(void* arg) {
+		Engine* engine = static_cast<Engine*>(arg);
+        engine->loop(arg);
+    }
 	#endif
+
+	Window* Engine::init (Configuration configuration) {
+		return init(
+			configuration.title,
+			configuration.width,
+			configuration.height,
+			configuration.fullscreen,
+			configuration.vsync,
+			configuration.resizable
+		);
+	}
 
 	Window* Engine::init (const char* title, int width, int height, bool fullscreen, bool vsync, bool resizable) {
 		camera = new Camera(width, height, glm::vec3(0.0f, 0.0f, 5.0f));
@@ -34,7 +49,7 @@ namespace Blackbox {
 		
 		// Initialize GLFW
 		glfwSetErrorCallback([](int error, const char *msg){
-			std::cerr << '[' << error << ']' << msg << std::endl;
+			LogError(error, ' ', msg);
 		});
 		
 		glfwInit();
@@ -50,21 +65,17 @@ namespace Blackbox {
 
 		glfwWindowHint(GLFW_SAMPLES  , 8);
 		glfwWindowHint(GLFW_SRGB_CAPABLE, 1);
-
-		Log("Init success");
 		
 		Window* window = new Window(title, width, height, fullscreen);
 		
 		if (window->Get() == NULL) {
-			std::cout << "Failed to create GLFW window" << std::endl;
+			LogError("Failed to create GLFW window");
 			glfwTerminate();
 		}
 		
 		glfwSetWindowUserPointer(window->Get(), this);
-		Log("Window success");
-
 		glfwMakeContextCurrent(window->Get());
-		Log("GLContext success");
+		LogInternal("GLContext success");
 		
 		//Load GLAD so it configures OpenGL
 		#ifndef __EMSCRIPTEN__
@@ -93,7 +104,7 @@ namespace Blackbox {
 			framebuffer_size_callback(window->Get(), width, height);
 		#endif
 
-		Log("Viewport success");
+		LogInternal("Viewport success");
 
 		auto drop_callback = [] (GLFWwindow* window, int count, const char** paths) {
 			const char* name = paths[0];
@@ -105,11 +116,6 @@ namespace Blackbox {
 		glfwSetDropCallback(window->Get(), drop_callback);
 
 		camera->perspective = true;
-
-		defaultShader = new Shader(
-			DEFAULT_UNLIT_VERT,
-			DEFAULT_UNLIT_FRAG
-		);
 
 		currentWindow = window;
 		world = ECS::World::createWorld();
@@ -137,11 +143,16 @@ namespace Blackbox {
 		engine->OnUpdate.Invoke();
 		engine->world->tick(Time.deltaTime);
 
+		Shader* defaultShader = new Shader(
+			DEFAULT_UNLIT_VERT,
+			DEFAULT_UNLIT_FRAG
+		);
+
 		// Draw Meshes //
 		for (ECS::Entity* ent : engine->world->each<Transform>()) {
 			ent->with<Transform, Mesh, Material>([&](ECS::ComponentHandle<Transform> tr, ECS::ComponentHandle<Mesh> mesh, ECS::ComponentHandle<Material> mat) {
 
-				if (mat->shader == nullptr) mat->shader = engine->defaultShader;
+				if (mat->shader == nullptr) mat->shader = defaultShader;
 				if (mat->texture == nullptr) {
 					unsigned char white[] = {255,255,255};
 					mat->texture = new Texture(white, 1, 1, 3, GL_TEXTURE_2D);

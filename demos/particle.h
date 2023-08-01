@@ -61,7 +61,6 @@ public:
 			glm::vec3 directionToCenter = -particleTransform->position;
 			glm::vec3 centeringForce = directionToCenter;
 			acceleration += centeringForce;
-
 			// Update the velocity and position of the particle using the Verlet integration method
 			particleBody->velocity += acceleration * dt;
 			particle->get<Transform>()->position += particleBody->velocity * dt + 0.5f * acceleration * dt * dt;
