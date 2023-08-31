@@ -222,4 +222,8 @@ namespace Blackbox {
 		glfwTerminate();
 		return 0;
 	}
+
+	Engine::~Engine () {
+		
+	}
 }

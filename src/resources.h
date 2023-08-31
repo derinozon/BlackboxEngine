@@ -7,7 +7,7 @@
 #include "../include/DG/DG_misc.h"
 #endif
 
-#include "mesh.h"
+#include "texture.h"
 
 namespace Blackbox {
 	

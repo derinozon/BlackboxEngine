@@ -66,8 +66,8 @@ namespace Blackbox {
 		Action OnQuit = Action();
 
 		Engine(){};
+		~Engine ();
 
-		private:
 		void loop(void* arg);
 	};
 }
